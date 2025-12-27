@@ -1,20 +1,3 @@
-Here is a Professional, High-End README.md for your GitHub repository.
-
-I have designed it to look like a portfolio piece for a Senior Developer. It highlights the Luxury Design, the Technical Complexity, and the Business Logic we built.
-
-📝 Instructions:
-
-Create a file named README.md in your main folder.
-
-Paste the text below into it.
-
-Important: Take 2-3 screenshots of your site (Hero Section, Admin Panel, Mobile View) and save them in a folder, or just remove the ![Screenshot] lines if you don't have them yet.
-
-code
-Markdown
-download
-content_copy
-expand_less
 # 🕰️ Lahazat Store (لحظات) | Luxury E-Commerce Platform
 
 ![Project Status](https://img.shields.io/badge/Status-Completed-success)
@@ -82,14 +65,10 @@ Follow these steps to run the project locally.
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/AhmedKashima/watchstore.git
+git clone git@github.com:AhmedKashima/lahzat-store28d.git
 cd watchstore
 2. Backend Setup (Django)
-code
-Bash
-download
-content_copy
-expand_less
+
 cd backend
 
 # Create Virtual Environment
@@ -115,11 +94,6 @@ The API will run at http://127.0.0.1:8000
 
 Open a new terminal.
 
-code
-Bash
-download
-content_copy
-expand_less
 cd frontend
 
 # Install Dependencies
@@ -136,11 +110,8 @@ The Website will run at http://localhost:3000
 
 📂 Project Structure
 code
-Text
-download
-content_copy
-expand_less
-watchStore/
+
+lahzat-store28d/
 ├── backend/                 # Django API
 │   ├── backend/             # Settings (CORS, Apps)
 │   ├── store/               # Main App (Models, Views, URLs)
@@ -169,9 +140,3 @@ Full Stack Developer
 Specialized in High-End E-commerce Solutions
 
 © 2025 Lahazat Store. All Rights Reserved.
-
-code
-Code
-download
-content_copy
-expand_less
