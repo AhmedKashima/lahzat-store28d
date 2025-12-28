@@ -42,7 +42,9 @@ DATABASES = {
     )
 }
 
-
+CORS_ALLOWED_ORIGINS = [
+    "https://lahzat-store28d.vercel.app",
+]
 # Application definition
 
 # INSTALLED_APPS = [
