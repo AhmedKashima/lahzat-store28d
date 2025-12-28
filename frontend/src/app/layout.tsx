@@ -31,18 +31,52 @@
 // }
 
 
+// import './globals.css'
+// import { Cairo, Amiri } from 'next/font/google' // Import Luxury Fonts
+
+// const cairo = Cairo({ 
+//   subsets: ['arabic'],
+//   variable: '--font-cairo', // Modern font for UI
+// })
+
+// const amiri = Amiri({ 
+//   subsets: ['arabic'], 
+//   weight: ['400', '700'],
+//   variable: '--font-amiri', // Classic font for Headings
+// })
+
+// export const metadata = {
+//   title: 'متجر لحظات | WatchStore',
+//   description: 'أفضل الساعات الفاخرة',
+// }
+
+// export default function RootLayout({ children }) {
+//   return (
+//     <html lang="ar" dir="rtl">
+//       <body className={`${cairo.variable} ${amiri.variable} font-sans bg-slate-950`}>
+//         <main className="min-h-screen">
+//            {children}
+//         </main>
+//       </body>
+//     </html>
+//   )
+// }
+
+
+
 import './globals.css'
-import { Cairo, Amiri } from 'next/font/google' // Import Luxury Fonts
+import { Cairo, Amiri } from 'next/font/google' 
+import React from 'react' // Import React
 
 const cairo = Cairo({ 
   subsets: ['arabic'],
-  variable: '--font-cairo', // Modern font for UI
+  variable: '--font-cairo', 
 })
 
 const amiri = Amiri({ 
   subsets: ['arabic'], 
   weight: ['400', '700'],
-  variable: '--font-amiri', // Classic font for Headings
+  variable: '--font-amiri', 
 })
 
 export const metadata = {
@@ -50,7 +84,11 @@ export const metadata = {
   description: 'أفضل الساعات الفاخرة',
 }
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="ar" dir="rtl">
       <body className={`${cairo.variable} ${amiri.variable} font-sans bg-slate-950`}>
