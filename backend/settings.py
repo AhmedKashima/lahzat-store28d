@@ -25,7 +25,22 @@ SECRET_KEY = 'django-insecure-j7$t4#j4^61k#z%8e+g3s(6&r0s4e2^9@_^_iax8j$umok8*q8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['lahzat-store28d.onrender.com', 'localhost', '127.0.0.1']
+
+# Also add CORS settings to allow your Vercel frontend
+CORS_ALLOWED_ORIGINS = [
+    "https://lahzat-store28d.vercel.app",
+]
+
+import dj_database_url
+import os
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3',
+        conn_max_age=600
+    )
+}
 
 
 # Application definition

@@ -66,7 +66,7 @@
 
 import './globals.css'
 import { Cairo, Amiri } from 'next/font/google' 
-import React from 'react' // Import React
+import React from 'react'
 
 const cairo = Cairo({ 
   subsets: ['arabic'],
@@ -84,6 +84,7 @@ export const metadata = {
   description: 'أفضل الساعات الفاخرة',
 }
 
+// Fixed the error here by adding types
 export default function RootLayout({
   children,
 }: {

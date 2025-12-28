@@ -438,3 +438,7 @@ yt-dlp==2025.6.30
 zipp==3.23.0
 zope.interface==7.2
 zstandard==0.23.0
+dj-database-url
+psycopg2-binary
+gunicorn
+django-cors-headers
