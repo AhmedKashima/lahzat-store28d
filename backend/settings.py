@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+from engineio import Middleware
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,8 +44,23 @@ DATABASES = {
     )
 }
 
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+Middleware.insert(
+    1, 'whitenoise.middleware.WhiteNoiseMiddleware'
+)
+
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+
+
 CORS_ALLOWED_ORIGINS = [
     "https://lahzat-store28d.vercel.app",
+    'localhost',
+    '127.0.0.1',
+    '.railway.app',
 ]
 # Application definition
 
