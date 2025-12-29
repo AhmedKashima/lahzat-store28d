@@ -271,6 +271,8 @@ INSTALLED_APPS = [
     'store',
 ]
 
+ROOT_URLCONF = 'backend.urls'
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
