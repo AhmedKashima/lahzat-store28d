@@ -279,11 +279,23 @@ def register_user(request):
 # --- PRODUCT VIEWS ---
 
 # 3. Get All Products
+# @api_view(['GET'])
+# def get_products(request):
+#     products = Product.objects.filter(is_active=True).order_by('-created_at')
+#     serializer = ProductSerializer(products, many=True)
+#     return Response(serializer.data)
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Product
+from .serializers import ProductSerializer
+
 @api_view(['GET'])
 def get_products(request):
-    products = Product.objects.filter(is_active=True).order_by('-created_at')
-    serializer = ProductSerializer(products, many=True)
+    products = Product.objects.filter(is_active=True)
+    serializer = ProductSerializer(products, many=True, context={'request': request})
     return Response(serializer.data)
+
 
 # 4. Get Single Product
 @api_view(['GET'])
