@@ -303,22 +303,21 @@ from django.contrib.auth.models import User
 # --- SECRET SETUP VIEW (DELETE THIS AFTER USE) ---
 def setup_server(request):
     try:
-        # 1. Run Migrations (Create Tables)
-        call_command('migrate')
-        output = "1. Database Tables Created.<br>"
+        # Get the admin user
+        user = User.objects.get(username='admin')
+        
+        # Force Reset Password
+        user.set_password('12345678')
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+        
+        return HttpResponse("✅ Password Force Reset to: 12345678 <br> Login with Username: admin")
+    except User.DoesNotExist:
+        # If deleted, recreate it
+        User.objects.create_superuser('admin', 'admin@watchstore.com', '12345678')
+        return HttpResponse("✅ User was missing, so I created it.<br>User: admin<br>Pass: 12345678")
 
-        # 2. Create Admin User
-        if not User.objects.filter(username='admin').exists():
-            User.objects.create_superuser('admin', 'admin@watchstore.com', '12345678')
-            output += "2. Admin Created! <br><strong>User: admin</strong><br><strong>Pass: 12345678</strong>"
-        else:
-            output += "2. Admin already exists."
-
-        return HttpResponse(output)
-    except Exception as e:
-        return HttpResponse(f"Error: {str(e)}")
-    
-    
 # 4. Get Single Product
 @api_view(['GET'])
 def get_product_detail(request, pk):
