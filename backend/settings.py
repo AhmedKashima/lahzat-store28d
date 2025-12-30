@@ -237,11 +237,14 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # Hosts allowed
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '.onrender.com',
-]
+# ALLOWED_HOSTS = [
+#     'localhost',
+#     '127.0.0.1',
+#     '.onrender.com',
+# ]
+
+# Allow Render to access the site
+ALLOWED_HOSTS = ['*']
 
 # CORS settings for frontend
 CORS_ALLOWED_ORIGINS = [
@@ -351,6 +354,19 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Media (Images)
 MEDIA_URL = '/images/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# --- STATIC FILES CONFIGURATION (Crucial for Admin Panel) ---
+import os
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Enable Whitenoise to serve the Admin CSS
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media (User Uploads)
+MEDIA_URL = '/images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 # REST Framework & JWT
 REST_FRAMEWORK = {
