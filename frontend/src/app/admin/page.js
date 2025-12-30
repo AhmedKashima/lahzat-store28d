@@ -1050,16 +1050,16 @@ export default function AdminDashboard() {
                 {products.map((item) => (
                     <tr key={item.id} className="hover:bg-slate-800/50 transition">
               <td className="p-5">
-                            <img 
-                                src={
-                                    item.image 
-                                    ? (item.image.toString().startsWith('http') ? item.image : `${process.env.NEXT_PUBLIC_API_URL}${item.image}`) 
-                                    : '/placeholder.png'
-                                } 
-                                alt={item.name} 
-                                className="w-12 h-12 rounded-lg object-cover border border-slate-700" 
-                            />
-                        </td>
+              <img 
+                    src={
+                        item.image 
+                        ? (item.image.toString().startsWith('http') ? item.image : `${process.env.NEXT_PUBLIC_API_URL}${item.image}`) 
+                        : '/placeholder.png'
+                    } 
+                    alt={item.name} 
+                    className="w-12 h-12 rounded-lg object-cover border border-slate-700" 
+                />
+                            </td>
                         <td className="p-5 font-bold text-white">{item.name}</td>
                         <td className="p-5">
                             <span className="bg-slate-800 text-slate-300 px-3 py-1 rounded-lg text-xs">

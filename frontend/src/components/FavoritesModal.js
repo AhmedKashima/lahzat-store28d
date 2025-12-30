@@ -166,11 +166,11 @@ export default function FavoritesModal({ isOpen, onClose, allProducts }) {
                   
                   {/* Image */}
                   <div className="w-20 h-20 bg-white rounded-lg flex-shrink-0 flex items-center justify-center">
-                     <img 
-                       src={item.image ? (item.image.toString().startsWith('http') ? item.image : `${process.env.NEXT_PUBLIC_API_URL}${item.image}`) : '/placeholder.png'} 
-                       alt={item.name} 
-                       className="max-h-full max-w-full object-contain" 
-                     />
+                  <img 
+                      src={item.image ? item.image : "https://via.placeholder.com/300?text=No+Image"} 
+                      alt={item.name} 
+                      className="max-h-full max-w-full object-contain" 
+                    />
                   </div>
 
                   {/* Info */}

@@ -75,9 +75,14 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
   const whatsappLink = `https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(message)}`;
 
   // 1. FIX IMAGE URL
+  // const imageUrl = product.image 
+  //   ? (product.image.toString().startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image}`)
+  //   : "/placeholder.png";
+
   const imageUrl = product.image 
-    ? (product.image.toString().startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image}`)
-    : "/placeholder.png";
+  ? product.image 
+  : "https://via.placeholder.com/300?text=No+Image";
+
 
   // 2. FIX CATEGORY NAME (Translate to Arabic)
   const categoryNames = {

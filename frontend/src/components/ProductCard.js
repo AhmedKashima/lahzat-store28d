@@ -387,10 +387,14 @@ const ProductCard = ({ product, onQuickView }) => {
     ? Math.round(((Number(product.old_price) - Number(product.price)) / Number(product.old_price)) * 100)
     : 0;
 
-  const imageUrl = product.image 
-    ? (product.image.toString().startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image}`)
-    : "/placeholder.png";
+  // const imageUrl = product.image 
+  //   ? (product.image.toString().startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image}`)
+  //   : "/placeholder.png";
 
+  const imageUrl = product.image 
+  ? product.image 
+  : "https://via.placeholder.com/300?text=No+Image";
+  
   return (
     <>
       <div className="group relative bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-amber-500/50 transition-all duration-300 shadow-xl h-full flex flex-col">
