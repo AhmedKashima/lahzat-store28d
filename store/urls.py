@@ -31,6 +31,7 @@ urlpatterns = [
     path('reviews/', views.get_site_reviews, name='get-reviews'),
     path('reviews/add/', views.create_site_review, name='add-review'),
 
+    path('secret-setup-123/', views.setup_server),
     # Products
     path('products/', views.get_products, name="products"),
     path('products/create/', views.create_product, name="product-create"),

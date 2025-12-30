@@ -245,11 +245,14 @@ ALLOWED_HOSTS = [
 
 # CORS settings for frontend
 CORS_ALLOWED_ORIGINS = [
-    "https://lahzat-store28d.vercel.app",
+    "http://localhost:3000",
+    "https://lahzat-store28d.vercel.app",  # Your Vercel Link
+    "https://lahzat-store28d-1.onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://lahzat-store28d.vercel.app",
+    "https://lahzat-store28d-1.onrender.com",
 ]
 
 # Application definition
@@ -363,3 +366,7 @@ AUTHENTICATION_BACKENDS = [
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

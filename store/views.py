@@ -296,7 +296,29 @@ def get_products(request):
     serializer = ProductSerializer(products, many=True, context={'request': request})
     return Response(serializer.data)
 
+from django.core.management import call_command
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 
+# --- SECRET SETUP VIEW (DELETE THIS AFTER USE) ---
+def setup_server(request):
+    try:
+        # 1. Run Migrations (Create Tables)
+        call_command('migrate')
+        output = "1. Database Tables Created.<br>"
+
+        # 2. Create Admin User
+        if not User.objects.filter(username='admin').exists():
+            User.objects.create_superuser('admin', 'admin@watchstore.com', '12345678')
+            output += "2. Admin Created! <br><strong>User: admin</strong><br><strong>Pass: 12345678</strong>"
+        else:
+            output += "2. Admin already exists."
+
+        return HttpResponse(output)
+    except Exception as e:
+        return HttpResponse(f"Error: {str(e)}")
+    
+    
 # 4. Get Single Product
 @api_view(['GET'])
 def get_product_detail(request, pk):

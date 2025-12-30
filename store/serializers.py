@@ -132,6 +132,44 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Product, SiteReview
 
 # Product Serializer
+# class ProductSerializer(serializers.ModelSerializer):
+#     image = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Product
+#         fields = '__all__'
+
+#     def get_image(self, obj):
+#         if not obj.image:
+#             return None
+#         # If running with Cloudinary, obj.image.url is already absolute
+#         return obj.image.url
+
+
+
+# store/serializers.py
+from rest_framework import serializers
+from .models import Product
+
+# class ProductSerializer(serializers.ModelSerializer):
+#     image = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Product
+#         fields = '__all__'
+
+#     def get_image(self, obj):
+#         if not obj.image:
+#             return None
+#         request = self.context.get('request')
+#         # Use full URL
+#         if request:
+#             return request.build_absolute_uri(obj.image.url)
+#         return obj.image.url
+
+from rest_framework import serializers
+from .models import Product
+
 class ProductSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
 
@@ -140,10 +178,9 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_image(self, obj):
-        if not obj.image:
-            return None
-        # If running with Cloudinary, obj.image.url is already absolute
-        return obj.image.url
+        if obj.image:
+            return str(obj.image)  # CloudinaryField automatically gives URL
+        return None
 
 
 # User Serializer with Token
