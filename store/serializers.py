@@ -170,19 +170,36 @@ from .models import Product
 from rest_framework import serializers
 from .models import Product
 
+# class ProductSerializer(serializers.ModelSerializer):
+#     image = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Product
+#         fields = '__all__'
+
+#     def get_image(self, obj):
+#         if obj.image:
+#             return str(obj.image)  # CloudinaryField automatically gives URL
+#         return None
+
+
+# 1. Product Serializer
 class ProductSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField() # <--- Override the image field
 
     class Meta:
         model = Product
         fields = '__all__'
 
     def get_image(self, obj):
-        if obj.image:
-            return str(obj.image)  # CloudinaryField automatically gives URL
+        try:
+            if obj.image:
+                return obj.image.url  # This forces the Full Cloudinary URL (https://...)
+        except:
+            return None
         return None
-
-
+    
+    
 # User Serializer with Token
 class UserSerializerWithToken(serializers.ModelSerializer):
     isAdmin = serializers.SerializerMethodField(read_only=True)
