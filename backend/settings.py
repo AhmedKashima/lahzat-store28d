@@ -516,6 +516,9 @@ CORS_ALLOWED_ORIGINS = [
     "https://lahzat-store28d.vercel.app", 
     # Add your new Vercel URL here if it changes
 ]
-CSRF_TRUSTED_ORIGINS = ["https://lahzat-store28d.vercel.app"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://lahzat-store28d.vercel.app",               # Trust the Frontend
+    "https://lahzat-store28d-production.up.railway.app", # Trust the Backend (Admin Panel) <-- ADD THIS
+]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
