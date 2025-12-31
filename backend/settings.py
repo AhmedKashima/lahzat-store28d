@@ -219,46 +219,211 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 
 
-from pathlib import Path
-import os
-from datetime import timedelta
-import dj_database_url
+# from pathlib import Path
+# import os
+# from datetime import timedelta
+# import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    'SECRET_KEY',
-    'django-insecure-j7$t4#j4^61k#z%8e+g3s(6&r0s4e2^9@_^_iax8j$umok8*q8'
-)
+# # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = os.environ.get(
+#     'SECRET_KEY',
+#     'django-insecure-j7$t4#j4^61k#z%8e+g3s(6&r0s4e2^9@_^_iax8j$umok8*q8'
+# )
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-# Hosts allowed
-# ALLOWED_HOSTS = [
-#     'localhost',
-#     '127.0.0.1',
-#     '.onrender.com',
+# # Hosts allowed
+# # ALLOWED_HOSTS = [
+# #     'localhost',
+# #     '127.0.0.1',
+# #     '.onrender.com',
+# # ]
+
+# # Allow Render to access the site
+# ALLOWED_HOSTS = ['*']
+
+# # CORS settings for frontend
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "https://lahzat-store28d.vercel.app",  # Your Vercel Link
+#     "https://lahzat-store28d-1.onrender.com",
 # ]
 
-# Allow Render to access the site
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://lahzat-store28d.vercel.app",
+#     "https://lahzat-store28d-1.onrender.com",
+# ]
+
+# # Application definition
+# INSTALLED_APPS = [
+#     'django.contrib.admin',
+#     'django.contrib.auth',
+#     'django.contrib.contenttypes',
+#     'django.contrib.sessions',
+#     'django.contrib.messages',
+#     'django.contrib.staticfiles',
+
+#     # Third-party
+#     'rest_framework',
+#     'corsheaders',
+#     'cloudinary',
+#     'cloudinary_storage',
+
+#     # Your apps
+#     'store',
+# ]
+
+# ROOT_URLCONF = 'backend.urls'
+
+# MIDDLEWARE = [
+#     'corsheaders.middleware.CorsMiddleware',
+#     'django.middleware.security.SecurityMiddleware',
+#     'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files efficiently
+
+#     'django.contrib.sessions.middleware.SessionMiddleware',
+#     'django.middleware.common.CommonMiddleware',
+#     'django.middleware.csrf.CsrfViewMiddleware',
+#     'django.contrib.auth.middleware.AuthenticationMiddleware',
+#     'django.contrib.messages.middleware.MessageMiddleware',
+#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+# ]
+
+# ROOT_URLCONF = 'backend.urls'
+
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [],  # Add template dirs if needed
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#         },
+#     },
+# ]
+
+# WSGI_APPLICATION = 'backend.wsgi.application'
+
+# # Database
+# # DATABASES = {
+# #     'default': dj_database_url.config(
+# #         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+# #         conn_max_age=600
+# #     )
+# # }
+
+# # Use Neon DB if the URL exists, otherwise use local sqlite
+# import os
+
+# # 1. DATABASE CONFIGURATION
+# # DATABASES = {
+# #     'default': dj_database_url.config(
+# #         # Paste your Neon URL inside the quotes below for local testing, 
+# #         # OR better: read from environment variable
+# #         default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
+# #         conn_max_age=600
+# #     )
+# # }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# # Password validation
+# AUTH_PASSWORD_VALIDATORS = [
+#     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+#     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+#     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+#     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+# ]
+
+# # Internationalization
+# LANGUAGE_CODE = 'en-us'
+# TIME_ZONE = 'UTC'
+# USE_I18N = True
+# USE_TZ = True
+
+# # Static files (CSS, JavaScript, Images)
+# STATIC_URL = '/static/'
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# # Media (Images)
+# MEDIA_URL = '/images/'
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# # --- STATIC FILES CONFIGURATION (Crucial for Admin Panel) ---
+# import os
+
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# # Enable Whitenoise to serve the Admin CSS
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# # Media (User Uploads)
+# MEDIA_URL = '/images/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+# # REST Framework & JWT
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     )
+# }
+
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+# }
+
+# # Cloudinary settings
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dyfyuesjo'),
+#     'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '297334633348874'),
+#     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'ySrS2o9yvPlSMPZu8k3bAY4MH5g'),
+# }
+
+# # Authentication backends
+# AUTHENTICATION_BACKENDS = [
+#     'store.backends.EmailBackend',
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
+
+# # Default primary key field type
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+from pathlib import Path
+import os
+import dj_database_url
+from datetime import timedelta
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# SECURITY: Get key from Environment
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-fallback-key')
+
+# DEBUG: False in production
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
+# ALLOWED HOSTS: Allow Railway URL
 ALLOWED_HOSTS = ['*']
 
-# CORS settings for frontend
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://lahzat-store28d.vercel.app",  # Your Vercel Link
-    "https://lahzat-store28d-1.onrender.com",
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://lahzat-store28d.vercel.app",
-    "https://lahzat-store28d-1.onrender.com",
-]
-
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -266,24 +431,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Third-party
+    # Third Party
     'rest_framework',
     'corsheaders',
     'cloudinary',
     'cloudinary_storage',
-
-    # Your apps
+    # My Apps
     'store',
 ]
 
-ROOT_URLCONF = 'backend.urls'
-
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # Top
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files efficiently
-
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -297,7 +457,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # Add template dirs if needed
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -311,71 +471,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Database
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-#         conn_max_age=600
-#     )
-# }
-
-# Use Neon DB if the URL exists, otherwise use local sqlite
-import os
-
-# 1. DATABASE CONFIGURATION
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         # Paste your Neon URL inside the quotes below for local testing, 
-#         # OR better: read from environment variable
-#         default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
-#         conn_max_age=600
-#     )
-# }
-
+# DATABASE: Connect via URL (Railway or Neon)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+        conn_max_age=600
+    )
 }
 
-# Password validation
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
-
-# Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Media (Images)
-MEDIA_URL = '/images/'
+# CLOUDINARY
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_URL = '/images/'
 
-# --- STATIC FILES CONFIGURATION (Crucial for Admin Panel) ---
-import os
-
+# STATIC FILES
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Enable Whitenoise to serve the Admin CSS
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media (User Uploads)
-MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
-
-# REST Framework & JWT
+# AUTH
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -387,22 +505,17 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
-# Cloudinary settings
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', 'dyfyuesjo'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', '297334633348874'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', 'ySrS2o9yvPlSMPZu8k3bAY4MH5g'),
-}
-
-# Authentication backends
 AUTHENTICATION_BACKENDS = [
     'store.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-# Default primary key field type
+# CORS: Allow Vercel
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://lahzat-store28d.vercel.app", 
+    # Add your new Vercel URL here if it changes
+]
+CSRF_TRUSTED_ORIGINS = ["https://lahzat-store28d.vercel.app"]
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
