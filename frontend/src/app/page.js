@@ -4525,6 +4525,267 @@
 
 
 
+// 'use client'; 
+
+// import { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { useRouter } from 'next/navigation';
+// import Link from 'next/link';
+// import ProductCard from '../components/ProductCard';
+// import AuthModal from '../components/AuthModal';
+// import QuickViewModal from '../components/QuickViewModal';
+// import FavoritesModal from '../components/FavoritesModal'; 
+// import ReviewsSection from '../components/ReviewsSection';
+
+// import { 
+//   UserCircleIcon, ShoppingBagIcon, WrenchScrewdriverIcon, 
+//   ArrowRightOnRectangleIcon, SparklesIcon, ChevronDownIcon,
+//   PhoneIcon, FireIcon, HeartIcon, ChatBubbleLeftRightIcon
+// } from '@heroicons/react/24/outline';
+
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import { Autoplay, Navigation } from 'swiper/modules';
+// import 'swiper/css';
+// import 'swiper/css/navigation';
+
+// export default function Home() {
+//   const router = useRouter();
+//   const [products, setProducts] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [isAuthOpen, setAuthOpen] = useState(false);
+//   const [user, setUser] = useState(null);
+//   const [activeCategory, setActiveCategory] = useState('all');
+//   const [quickViewProduct, setQuickViewProduct] = useState(null); 
+//   const [isFavOpen, setFavOpen] = useState(false);
+//   const [currentBgIndex, setCurrentBgIndex] = useState(0);
+
+//   const heroImages = [
+//     'https://res.cloudinary.com/dyfyuesjo/image/upload/v1766863168/photo_5942536907487120473_y_glkpc9.jpg',
+//     'https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?q=80&w=1920&auto=format&fit=crop',
+//     'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=1920&auto=format&fit=crop',
+//     'https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=1920&auto=format&fit=crop',
+//   ];
+
+//   useEffect(() => {
+//     heroImages.forEach(src => { const img = new Image(); img.src = src; });
+//     const interval = setInterval(() => setCurrentBgIndex(p => (p + 1) % heroImages.length), 5000);
+//     return () => clearInterval(interval);
+//   }, []);
+
+//   const categories = [
+//     { id: 'men_watches', name: 'ساعات رجالي' },
+//     { id: 'women_watches', name: 'ساعات نسائي' },
+//     { id: 'rings', name: 'الخواتم العقيق' },
+//     { id: 'perfumes', name: 'العطور' },
+//     { id: 'accessories', name: 'الاكسسوارات' },
+//     { id: 'gifts', name: 'تحف وهدايا' },
+//     { id: 'glasses', name: 'نظارات' },
+//   ];
+
+//   const categoryQuotes = {
+//     all: { title: "مجموعتنا الكاملة", text: "تصفح أرقى المقتنيات التي اخترناها لك بعناية فائقة." },
+//     men_watches: { title: "هيبة الحضور", text: "لأن الوقت من ذهب،ارتدي ما يليق بمكانتك." },
+//     women_watches: { title: "أيقونة الأنوثة", text: "كوني سيدة اللحظة مع تشكيلة تليق بجمالك." },
+//     perfumes: { title: "أثر لا يغيب", text: "عطرك هو توقيعك الذي يتركه حضورك في المكان." },
+//     gifts: { title: "لغة المشاعر", text: "هدايا فاخرة تحكي قصة اهتمامك لمن تحب." },
+//     rings: { title: "عراقة التاريخ", text: "خواتم عقيق نادرة تمنحك تميزاً لا يخطئه أحد." },
+//     accessories: { title: "اكتمال الأناقة", text: "التفاصيل الصغيرة هي التي تصنع الفارق الكبير." },
+//     glasses: { title: "نظرة الثقة", text: "واجه العالم برؤية عصرية وأناقة مطلقة." }
+//   };
+
+//   useEffect(() => {
+//     const userInfo = localStorage.getItem('userInfo');
+//     if (userInfo) setUser(JSON.parse(userInfo));
+//     fetchProducts();
+//   }, []);
+
+//   const fetchProducts = async () => {
+//     try {
+//       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/`);
+//       setProducts(data);
+//       setLoading(false);
+//     } catch (e) { setLoading(false); }
+//   };
+
+//   const logoutHandler = () => { localStorage.removeItem('userInfo'); setUser(null); window.location.reload(); };
+//   const handleCategoryClick = (id) => { setActiveCategory(id); document.getElementById('collection')?.scrollIntoView({ behavior: 'smooth' }); };
+  
+//   const bestSellers = products.filter(p => p.is_bestseller === true);
+//   const filteredProducts = activeCategory === 'all' ? products : products.filter(p => p.category === activeCategory);
+
+//   return (
+//     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-amber-500 overflow-x-hidden">
+      
+//       {/* NAVBAR */}
+//       <nav className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+//         <div className="w-full px-4 md:px-8">
+//           <div className="flex justify-between h-20 items-center">
+            
+//             <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo(0, 0)}>
+//               <ShoppingBagIcon className="h-8 w-8 text-amber-500" />
+//               <h1 className="text-xl md:text-2xl font-black text-white font-serif"><span className="text-gold">Lahazat Store</span></h1>
+//             </div>
+
+//             <div className="hidden xl:flex items-center gap-5">
+//               {categories.map((cat) => (
+//                 <button key={cat.id} onClick={() => handleCategoryClick(cat.id)} className={`text-sm font-bold transition hover:text-amber-500 ${activeCategory === cat.id ? 'text-amber-500 border-b-2 border-amber-500' : 'text-slate-300'}`}>
+//                   {cat.name}
+//                 </button>
+//               ))}
+//             </div>
+
+//             <div className="flex items-center gap-2 md:gap-4">
+//               <button onClick={() => setFavOpen(true)} className="text-slate-300 hover:text-red-500"><HeartIcon className="h-7 w-7" /></button>
+//               {user ? (
+//                 <div className="flex items-center gap-2">
+//                   {user.isAdmin && (
+//                     <button onClick={() => router.push('/admin')} className="btn-gold p-2 rounded-lg font-bold flex items-center gap-1 text-xs">
+//                       <WrenchScrewdriverIcon className="h-4 w-4" />
+//                       <span className="hidden sm:block">لوحة التحكم</span>
+//                     </button>
+//                   )}
+//                   <div className="hidden sm:flex items-center gap-1 text-slate-300 border-l border-slate-700 pl-3">
+//                     <UserCircleIcon className="h-6 w-6" />
+//                     <span className="font-bold text-xs">{user.name || user.username}</span>
+//                   </div>
+//                   <button onClick={logoutHandler} className="text-slate-400"><ArrowRightOnRectangleIcon className="h-7 w-7" /></button>
+//                 </div>
+//               ) : (
+//                 <button onClick={() => setAuthOpen(true)} className="bg-slate-800 text-white px-5 py-2 rounded-full text-sm font-bold">دخول الأعضاء</button>
+//               )}
+//             </div>
+//           </div>
+//         </div>
+//       </nav>
+
+//       {/* HERO */}
+//       <div className="relative h-screen flex items-center justify-center bg-slate-900 overflow-hidden">
+//         {heroImages.map((img, index) => (
+//           <div key={index} className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[3000ms] ${index === currentBgIndex ? 'opacity-100 scale-110' : 'opacity-0 scale-100'}`} style={{ backgroundImage: `url('${img}')` }} />
+//         ))}
+//         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-slate-950/60 z-20"></div>
+
+//         <div className="relative z-30 text-center px-4 max-w-5xl">
+//           <h1 className="text-7xl md:text-9xl font-black mb-4 font-serif text-gold drop-shadow-2xl">لحظات</h1>
+//           <p className="text-xl md:text-3xl font-light mb-10 font-serif opacity-90">حيث تتحوّل التفاصيل إلى ذوق... والهدايا إلى ذكرى</p>
+          
+//           <div className="bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-3xl shadow-2xl mb-12">
+//              <p className="text-slate-200 text-lg md:text-xl leading-relaxed font-light">
+//                نختار لك بعناية <span className="text-amber-400">ساعات أنيقة، عطور فاخرة، وتحف نادرة</span>.
+//              </p>
+//           </div>
+
+//           <a href="#collection" className="inline-flex items-center gap-3 btn-gold text-black font-bold py-4 px-12 rounded-full text-xl shadow-2xl transition hover:-translate-y-2">
+//             <span>اكتشف المجموعة</span>
+//             <ChevronDownIcon className="h-6 w-6 animate-bounce" />
+//           </a>
+//         </div>
+//       </div>
+      
+//       <main className="w-full px-4 md:px-12 py-20">
+        
+//         {/* BEST SELLERS */}
+//         {bestSellers.length > 0 && (
+//           <div className="mb-24">
+//             <div className="flex items-center justify-center gap-4 mb-12">
+//               <FireIcon className="h-10 w-10 text-amber-500 animate-pulse" />
+//               <h2 className="text-4xl md:text-5xl font-serif font-black text-gold drop-shadow-2xl">الأكثر مبيعاً</h2>
+//             </div>
+            
+//             <Swiper modules={[Autoplay, Navigation]} spaceBetween={25} slidesPerView={1} navigation autoplay={{ delay: 3000 }} 
+//               breakpoints={{ 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 }, 1280: { slidesPerView: 4 } }}>
+//               {bestSellers.map((p) => (
+//                 <SwiperSlide key={p.id}><ProductCard product={p} onQuickView={(prod) => setQuickViewProduct(prod)} /></SwiperSlide>
+//               ))}
+//             </Swiper>
+//           </div>
+//         )}
+
+//         <div id="collection" className="pt-8"> 
+//             <div className="xl:hidden flex flex-wrap justify-center gap-2 mb-8">
+//                 <button onClick={() => setActiveCategory('all')} className={`px-4 py-2 rounded-full font-bold text-xs ${activeCategory === 'all' ? 'btn-gold' : 'bg-slate-800'}`}>الكل</button>
+//                 {categories.map((cat) => (
+//                     <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`px-4 py-2 rounded-full font-bold text-xs ${activeCategory === cat.id ? 'btn-gold' : 'bg-slate-800 text-slate-400'}`}>{cat.name}</button>
+//                 ))}
+//             </div>
+
+//             <div className="mb-16 text-center">
+//                 <div key={activeCategory} className="inline-block p-8 bg-slate-900/50 border border-amber-900/30 rounded-2xl max-w-4xl backdrop-blur-sm">
+//                     <SparklesIcon className="h-8 w-8 text-amber-500 mx-auto mb-4" />
+//                     <h3 className="text-amber-500 font-serif font-bold text-2xl mb-3">{categoryQuotes[activeCategory]?.title}</h3>
+//                     <p className="text-slate-300 text-xl font-light italic">"{categoryQuotes[activeCategory]?.text}"</p>
+//                 </div>
+//             </div>
+
+//             {loading ? (
+//               <div className="flex justify-center h-64 items-center"><div className="animate-spin h-12 w-12 border-t-2 border-amber-500 rounded-full"></div></div>
+//             ) : (
+//               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+//                   {filteredProducts.map((p) => ( <ProductCard key={p.id} product={p} onQuickView={(prod) => setQuickViewProduct(prod)} /> ))}
+//               </div>
+//             )}
+//         </div>
+//       </main>
+
+//       <ReviewsSection />
+
+//       {/* FOOTER */}
+//       <footer className="bg-slate-950 pt-20 border-t border-slate-900">
+//         <div className="w-full px-6 md:px-12">
+//           <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16 text-right">
+//             <div>
+//               <div className="flex items-center gap-2 mb-6">
+//                  <ShoppingBagIcon className="h-10 w-10 text-amber-500" />
+//                  <h2 className="text-3xl font-black text-white font-serif"><span className="text-gold">Lahazat Store</span></h2>
+//               </div>
+//               <p className="text-slate-400 font-light mb-8">مفهوم يتحدث بلغة محلية ويتبنى أناقة الساعات. نقدم لك الفخامة في كل تفصيل.</p>
+//             </div>
+            
+//             <div>
+//                <h3 className="text-white font-bold text-xl mb-8">روابط مهمة</h3>
+//                <ul className="space-y-4 text-slate-400">
+//                   <li><Link href="/about" className="hover:text-amber-500">من نحن</Link></li>
+//                   <li><Link href="/terms" className="hover:text-amber-500">الشروط والأحكام</Link></li>
+//                   <li><Link href="/privacy" className="hover:text-amber-500">سياسة الخصوصية</Link></li>
+//                </ul>
+//             </div>
+
+//             <div>
+//                <h3 className="text-white font-bold text-xl mb-8">تواصل معنا</h3>
+//                <ul className="space-y-4 text-slate-400">
+//                   <li className="flex items-center gap-3 justify-end">
+//                     <span dir="ltr">+967 782 875 877</span>
+//                     <PhoneIcon className="h-6 w-6 text-amber-500" />
+//                   </li>
+//                </ul>
+//             </div>
+//           </div>
+
+//           {/* SIGNATURE SECTION */}
+//           <div className="border-t border-slate-900 py-10 flex flex-col md:flex-row justify-between items-center gap-8">
+//              <p className="text-slate-500 order-2 md:order-1 text-sm">جميع الحقوق محفوظة | 2025 لحظات</p>
+//              <div className="flex flex-col items-center gap-1 order-1 md:order-2 group">
+//                 <span className="text-slate-600 text-[10px] uppercase tracking-[0.2em] italic font-light">Developed by</span>
+//                 <a href="https://wa.me/967782875877" target="_blank" className="relative flex items-center gap-2 group">
+//                    <span className="text-gold font-serif font-black text-2xl md:text-3xl transition group-hover:drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">IBRAHIM SALEH KASHIMA</span>
+//                    <div className="bg-slate-900 border border-slate-800 p-1 rounded-lg group-hover:border-amber-500">
+//                      <svg className="h-4 w-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+//                      </svg>
+//                    </div>
+//                 </a>
+//              </div>
+//           </div>
+//         </div>
+//       </footer>
+
+//       <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
+//       <QuickViewModal isOpen={!!quickViewProduct} onClose={() => setQuickViewProduct(null)} product={quickViewProduct} />
+//       <FavoritesModal isOpen={isFavOpen} onClose={() => setFavOpen(false)} allProducts={products} />
+//     </div>
+//   );
+// }
+
 'use client'; 
 
 import { useState, useEffect } from 'react';
@@ -4540,7 +4801,7 @@ import ReviewsSection from '../components/ReviewsSection';
 import { 
   UserCircleIcon, ShoppingBagIcon, WrenchScrewdriverIcon, 
   ArrowRightOnRectangleIcon, SparklesIcon, ChevronDownIcon,
-  PhoneIcon, FireIcon, HeartIcon, ChatBubbleLeftRightIcon
+  PhoneIcon, FireIcon, HeartIcon
 } from '@heroicons/react/24/outline';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -4567,7 +4828,6 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    heroImages.forEach(src => { const img = new Image(); img.src = src; });
     const interval = setInterval(() => setCurrentBgIndex(p => (p + 1) % heroImages.length), 5000);
     return () => clearInterval(interval);
   }, []);
@@ -4575,23 +4835,12 @@ export default function Home() {
   const categories = [
     { id: 'men_watches', name: 'ساعات رجالي' },
     { id: 'women_watches', name: 'ساعات نسائي' },
-    { id: 'rings', name: 'الخواتم العقيق' },
-    { id: 'perfumes', name: 'العطور' },
-    { id: 'accessories', name: 'الاكسسوارات' },
-    { id: 'gifts', name: 'تحف وهدايا' },
+    { id: 'rings', name: 'عقيق' },
+    { id: 'perfumes', name: 'عطور' },
+    { id: 'accessories', name: 'إكسسوار' },
+    { id: 'gifts', name: 'هدايا' },
     { id: 'glasses', name: 'نظارات' },
   ];
-
-  const categoryQuotes = {
-    all: { title: "مجموعتنا الكاملة", text: "تصفح أرقى المقتنيات التي اخترناها لك بعناية فائقة." },
-    men_watches: { title: "هيبة الحضور", text: "لأن الوقت من ذهب،ارتدي ما يليق بمكانتك." },
-    women_watches: { title: "أيقونة الأنوثة", text: "كوني سيدة اللحظة مع تشكيلة تليق بجمالك." },
-    perfumes: { title: "أثر لا يغيب", text: "عطرك هو توقيعك الذي يتركه حضورك في المكان." },
-    gifts: { title: "لغة المشاعر", text: "هدايا فاخرة تحكي قصة اهتمامك لمن تحب." },
-    rings: { title: "عراقة التاريخ", text: "خواتم عقيق نادرة تمنحك تميزاً لا يخطئه أحد." },
-    accessories: { title: "اكتمال الأناقة", text: "التفاصيل الصغيرة هي التي تصنع الفارق الكبير." },
-    glasses: { title: "نظرة الثقة", text: "واجه العالم برؤية عصرية وأناقة مطلقة." }
-  };
 
   useEffect(() => {
     const userInfo = localStorage.getItem('userInfo');
@@ -4608,180 +4857,95 @@ export default function Home() {
   };
 
   const logoutHandler = () => { localStorage.removeItem('userInfo'); setUser(null); window.location.reload(); };
-  const handleCategoryClick = (id) => { setActiveCategory(id); document.getElementById('collection')?.scrollIntoView({ behavior: 'smooth' }); };
   
   const bestSellers = products.filter(p => p.is_bestseller === true);
   const filteredProducts = activeCategory === 'all' ? products : products.filter(p => p.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-amber-500 overflow-x-hidden">
+    <div className="min-h-screen bg-[#020617] text-white overflow-x-hidden rtl" dir="rtl">
       
-      {/* NAVBAR */}
-      <nav className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
-        <div className="w-full px-4 md:px-8">
-          <div className="flex justify-between h-20 items-center">
+      {/* NAVBAR: Ultra-Clean like Cardial */}
+      <nav className="bg-slate-950/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-10 flex justify-between h-20 items-center">
             
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo(0, 0)}>
-              <ShoppingBagIcon className="h-8 w-8 text-amber-500" />
-              <h1 className="text-xl md:text-2xl font-black text-white font-serif"><span className="text-gold">Lahazat Store</span></h1>
+              <ShoppingBagIcon className="h-7 w-7 text-amber-500" />
+              <h1 className="text-xl md:text-2xl font-black tracking-tighter uppercase font-serif text-gold">Lahazat</h1>
             </div>
 
-            <div className="hidden xl:flex items-center gap-5">
+            <div className="hidden lg:flex items-center gap-8">
               {categories.map((cat) => (
-                <button key={cat.id} onClick={() => handleCategoryClick(cat.id)} className={`text-sm font-bold transition hover:text-amber-500 ${activeCategory === cat.id ? 'text-amber-500 border-b-2 border-amber-500' : 'text-slate-300'}`}>
+                <button key={cat.id} onClick={() => {setActiveCategory(cat.id); document.getElementById('collection').scrollIntoView();}} className="text-[13px] font-bold tracking-widest hover:text-amber-500 transition uppercase">
                   {cat.name}
                 </button>
               ))}
             </div>
 
-            <div className="flex items-center gap-2 md:gap-4">
-              <button onClick={() => setFavOpen(true)} className="text-slate-300 hover:text-red-500"><HeartIcon className="h-7 w-7" /></button>
-              {user ? (
-                <div className="flex items-center gap-2">
-                  {user.isAdmin && (
-                    <button onClick={() => router.push('/admin')} className="btn-gold p-2 rounded-lg font-bold flex items-center gap-1 text-xs">
-                      <WrenchScrewdriverIcon className="h-4 w-4" />
-                      <span className="hidden sm:block">لوحة التحكم</span>
-                    </button>
-                  )}
-                  <div className="hidden sm:flex items-center gap-1 text-slate-300 border-l border-slate-700 pl-3">
-                    <UserCircleIcon className="h-6 w-6" />
-                    <span className="font-bold text-xs">{user.name || user.username}</span>
-                  </div>
-                  <button onClick={logoutHandler} className="text-slate-400"><ArrowRightOnRectangleIcon className="h-7 w-7" /></button>
-                </div>
-              ) : (
-                <button onClick={() => setAuthOpen(true)} className="bg-slate-800 text-white px-5 py-2 rounded-full text-sm font-bold">دخول الأعضاء</button>
+            <div className="flex items-center gap-4">
+              {user?.isAdmin && (
+                <button onClick={() => router.push('/admin')} className="btn-gold px-4 py-1.5 rounded text-[11px] font-bold">CONTROL</button>
               )}
+              <button onClick={() => setAuthOpen(true)} className="text-slate-400 hover:text-white"><UserCircleIcon className="h-6 w-6" /></button>
             </div>
-          </div>
         </div>
       </nav>
 
-      {/* HERO */}
-      <div className="relative h-screen flex items-center justify-center bg-slate-900 overflow-hidden">
+      {/* HERO: Professional Aspect Ratio scaling */}
+      <div className="relative aspect-[16/9] md:h-[85vh] w-full overflow-hidden flex items-center justify-center">
         {heroImages.map((img, index) => (
-          <div key={index} className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[3000ms] ${index === currentBgIndex ? 'opacity-100 scale-110' : 'opacity-0 scale-100'}`} style={{ backgroundImage: `url('${img}')` }} />
+          <div key={index} className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[2000ms] ${index === currentBgIndex ? 'opacity-100 scale-105' : 'opacity-0 scale-100'}`} style={{ backgroundImage: `url('${img}')` }} />
         ))}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-slate-950/60 z-20"></div>
-
-        <div className="relative z-30 text-center px-4 max-w-5xl">
-          <h1 className="text-7xl md:text-9xl font-black mb-4 font-serif text-gold drop-shadow-2xl">لحظات</h1>
-          <p className="text-xl md:text-3xl font-light mb-10 font-serif opacity-90">حيث تتحوّل التفاصيل إلى ذوق... والهدايا إلى ذكرى</p>
-          
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-3xl shadow-2xl mb-12">
-             <p className="text-slate-200 text-lg md:text-xl leading-relaxed font-light">
-               نختار لك بعناية <span className="text-amber-400">ساعات أنيقة، عطور فاخرة، وتحف نادرة</span>.
-             </p>
-          </div>
-
-          <a href="#collection" className="inline-flex items-center gap-3 btn-gold text-black font-bold py-4 px-12 rounded-full text-xl shadow-2xl transition hover:-translate-y-2">
-            <span>اكتشف المجموعة</span>
-            <ChevronDownIcon className="h-6 w-6 animate-bounce" />
-          </a>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-[#020617] z-10"></div>
+        
+        <div className="relative z-20 text-center px-6">
+          <h1 className="text-4xl md:text-8xl font-serif text-gold drop-shadow-2xl mb-4">لـحـظـات</h1>
+          <p className="text-sm md:text-xl font-light tracking-[0.3em] uppercase opacity-80">Luxury Watch Store</p>
         </div>
       </div>
-      
-      <main className="w-full px-4 md:px-12 py-20">
+
+      <main className="max-w-[1400px] mx-auto px-4 md:px-10 py-16">
         
-        {/* BEST SELLERS */}
+        {/* BEST SELLERS TITLE */}
         {bestSellers.length > 0 && (
-          <div className="mb-24">
-            <div className="flex items-center justify-center gap-4 mb-12">
-              <FireIcon className="h-10 w-10 text-amber-500 animate-pulse" />
-              <h2 className="text-4xl md:text-5xl font-serif font-black text-gold drop-shadow-2xl">الأكثر مبيعاً</h2>
-            </div>
-            
-            <Swiper modules={[Autoplay, Navigation]} spaceBetween={25} slidesPerView={1} navigation autoplay={{ delay: 3000 }} 
-              breakpoints={{ 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 }, 1280: { slidesPerView: 4 } }}>
+          <div className="mb-16">
+            <h2 className="text-2xl md:text-4xl font-serif text-center mb-12">الأكثر مبيعاً</h2>
+            <Swiper modules={[Autoplay, Navigation]} spaceBetween={20} slidesPerView={2} breakpoints={{ 1024: { slidesPerView: 4 } }} navigation autoplay={{ delay: 3000 }}>
               {bestSellers.map((p) => (
-                <SwiperSlide key={p.id}><ProductCard product={p} onQuickView={(prod) => setQuickViewProduct(prod)} /></SwiperSlide>
+                <SwiperSlide key={p.id}><ProductCard product={p} /></SwiperSlide>
               ))}
             </Swiper>
           </div>
         )}
 
-        <div id="collection" className="pt-8"> 
-            <div className="xl:hidden flex flex-wrap justify-center gap-2 mb-8">
-                <button onClick={() => setActiveCategory('all')} className={`px-4 py-2 rounded-full font-bold text-xs ${activeCategory === 'all' ? 'btn-gold' : 'bg-slate-800'}`}>الكل</button>
-                {categories.map((cat) => (
-                    <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`px-4 py-2 rounded-full font-bold text-xs ${activeCategory === cat.id ? 'btn-gold' : 'bg-slate-800 text-slate-400'}`}>{cat.name}</button>
+        <div id="collection" className="pt-20 border-t border-white/5">
+            {/* CATEGORY BAR */}
+            <div className="flex overflow-x-auto gap-4 mb-12 no-scrollbar pb-4 justify-start md:justify-center">
+                <button onClick={() => setActiveCategory('all')} className={`px-6 py-2 rounded-full text-xs font-bold whitespace-nowrap transition ${activeCategory === 'all' ? 'bg-amber-500 text-black' : 'bg-white/5 border border-white/10'}`}>الكل</button>
+                {categories.map(cat => (
+                   <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`px-6 py-2 rounded-full text-xs font-bold whitespace-nowrap transition ${activeCategory === cat.id ? 'bg-amber-500 text-black' : 'bg-white/5 border border-white/10'}`}>{cat.name}</button>
                 ))}
             </div>
 
-            <div className="mb-16 text-center">
-                <div key={activeCategory} className="inline-block p-8 bg-slate-900/50 border border-amber-900/30 rounded-2xl max-w-4xl backdrop-blur-sm">
-                    <SparklesIcon className="h-8 w-8 text-amber-500 mx-auto mb-4" />
-                    <h3 className="text-amber-500 font-serif font-bold text-2xl mb-3">{categoryQuotes[activeCategory]?.title}</h3>
-                    <p className="text-slate-300 text-xl font-light italic">"{categoryQuotes[activeCategory]?.text}"</p>
-                </div>
+            {/* PRODUCT GRID - Correct spacing like Cardial */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10">
+                {filteredProducts.map((p) => (
+                  <ProductCard key={p.id} product={p} />
+                ))}
             </div>
-
-            {loading ? (
-              <div className="flex justify-center h-64 items-center"><div className="animate-spin h-12 w-12 border-t-2 border-amber-500 rounded-full"></div></div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {filteredProducts.map((p) => ( <ProductCard key={p.id} product={p} onQuickView={(prod) => setQuickViewProduct(prod)} /> ))}
-              </div>
-            )}
         </div>
       </main>
 
-      <ReviewsSection />
-
-      {/* FOOTER */}
-      <footer className="bg-slate-950 pt-20 border-t border-slate-900">
-        <div className="w-full px-6 md:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16 text-right">
-            <div>
-              <div className="flex items-center gap-2 mb-6">
-                 <ShoppingBagIcon className="h-10 w-10 text-amber-500" />
-                 <h2 className="text-3xl font-black text-white font-serif"><span className="text-gold">Lahazat Store</span></h2>
-              </div>
-              <p className="text-slate-400 font-light mb-8">مفهوم يتحدث بلغة محلية ويتبنى أناقة الساعات. نقدم لك الفخامة في كل تفصيل.</p>
-            </div>
-            
-            <div>
-               <h3 className="text-white font-bold text-xl mb-8">روابط مهمة</h3>
-               <ul className="space-y-4 text-slate-400">
-                  <li><Link href="/about" className="hover:text-amber-500">من نحن</Link></li>
-                  <li><Link href="/terms" className="hover:text-amber-500">الشروط والأحكام</Link></li>
-                  <li><Link href="/privacy" className="hover:text-amber-500">سياسة الخصوصية</Link></li>
-               </ul>
-            </div>
-
-            <div>
-               <h3 className="text-white font-bold text-xl mb-8">تواصل معنا</h3>
-               <ul className="space-y-4 text-slate-400">
-                  <li className="flex items-center gap-3 justify-end">
-                    <span dir="ltr">+967 782 875 877</span>
-                    <PhoneIcon className="h-6 w-6 text-amber-500" />
-                  </li>
-               </ul>
-            </div>
+      <footer className="bg-black py-20 border-t border-white/5">
+        <div className="max-w-[1400px] mx-auto px-10 flex flex-col items-center gap-10">
+          <div className="flex flex-col items-center group">
+             <span className="text-[10px] uppercase tracking-[0.3em] text-slate-500 mb-1">Developed by</span>
+             <a href="https://wa.me/967782875877" className="text-gold text-2xl md:text-4xl font-black font-serif transition hover:scale-105">AHMED KASHIMA</a>
           </div>
-
-          {/* SIGNATURE SECTION */}
-          <div className="border-t border-slate-900 py-10 flex flex-col md:flex-row justify-between items-center gap-8">
-             <p className="text-slate-500 order-2 md:order-1 text-sm">جميع الحقوق محفوظة | 2025 لحظات</p>
-             <div className="flex flex-col items-center gap-1 order-1 md:order-2 group">
-                <span className="text-slate-600 text-[10px] uppercase tracking-[0.2em] italic font-light">Developed by</span>
-                <a href="https://wa.me/967782875877" target="_blank" className="relative flex items-center gap-2 group">
-                   <span className="text-gold font-serif font-black text-2xl md:text-3xl transition group-hover:drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">IBRAHIM SALEH KASHIMA</span>
-                   <div className="bg-slate-900 border border-slate-800 p-1 rounded-lg group-hover:border-amber-500">
-                     <svg className="h-4 w-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                     </svg>
-                   </div>
-                </a>
-             </div>
-          </div>
+          <p className="text-slate-600 text-[11px] uppercase tracking-widest">© 2025 Lahazat Store. All Rights Reserved.</p>
         </div>
       </footer>
 
       <AuthModal isOpen={isAuthOpen} onClose={() => setAuthOpen(false)} />
-      <QuickViewModal isOpen={!!quickViewProduct} onClose={() => setQuickViewProduct(null)} product={quickViewProduct} />
-      <FavoritesModal isOpen={isFavOpen} onClose={() => setFavOpen(false)} allProducts={products} />
     </div>
   );
 }
