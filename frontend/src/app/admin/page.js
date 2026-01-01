@@ -841,7 +841,380 @@
 // }
 
 
+// 'use client';
+// import { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { useRouter } from 'next/navigation';
+// import { 
+//   HomeIcon, 
+//   PlusIcon, 
+//   PencilSquareIcon, 
+//   TrashIcon, 
+//   BanknotesIcon, 
+//   ArchiveBoxIcon,
+//   ArrowLeftOnRectangleIcon,
+//   StarIcon 
+// } from '@heroicons/react/24/outline';
+
+// export default function AdminDashboard() {
+//   const router = useRouter();
+//   const [products, setProducts] = useState([]);
+//   const [loading, setLoading] = useState(true);
+  
+//   // Form State
+//   const [showForm, setShowForm] = useState(false);
+//   const [editId, setEditId] = useState(null); 
+  
+//   // 1. Initialize State (Make sure nothing is undefined)
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     price: '',
+//     old_price: '',     // Default to empty string
+//     is_bestseller: false,
+//     category: 'men_watches',
+//     description: '',
+//     image: null
+//   });
+
+//   const categories = [
+//     { id: 'men_watches', name: 'ساعات رجالي' },
+//     { id: 'women_watches', name: 'ساعات نسائي' },
+//     { id: 'rings', name: 'الخواتم العقيق' },
+//     { id: 'perfumes', name: 'العطور' },
+//     { id: 'accessories', name: 'الاكسسوارات' },
+//     { id: 'gifts', name: 'تحف وهدايا' },
+//     { id: 'glasses', name: 'نظارات' },
+//   ];
+
+//   // 2. Security Check
+//   useEffect(() => {
+//     const userInfoString = localStorage.getItem('userInfo');
+//     if (!userInfoString) {
+//       router.push('/');
+//       return;
+//     }
+//     const userInfo = JSON.parse(userInfoString);
+//     if (!userInfo.isAdmin) {
+//       alert("⛔ عذراً، هذه الصفحة مخصصة للمدير فقط!");
+//       router.push('/'); 
+//       return;
+//     }
+//     fetchProducts();
+//   }, []);
+
+//   // 3. Fetch Data
+//   const fetchProducts = async () => {
+//     try {
+//       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/`);
+//       setProducts(data);
+//       setLoading(false);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+
+//   // 4. Handle Submit
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+    
+//     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+//     const token = userInfo ? userInfo.access : null;
+
+//     if (!token) {
+//         alert("Session expired. Please login again.");
+//         return;
+//     }
+    
+//     const uploadData = new FormData();
+//     uploadData.append('name', formData.name);
+//     uploadData.append('price', formData.price);
+    
+//     // Handle Optional Old Price
+//     if (formData.old_price) {
+//         uploadData.append('old_price', formData.old_price);
+//     } else {
+//         // If empty, send an empty string or don't append (Backend handles null)
+//         uploadData.append('old_price', ''); 
+//     }
+
+//     uploadData.append('is_bestseller', formData.is_bestseller ? 'True' : 'False');
+//     uploadData.append('category', formData.category);
+//     uploadData.append('description', formData.description);
+//     uploadData.append('is_active', 'True');
+    
+//     if (formData.image) {
+//       uploadData.append('image', formData.image);
+//     }
+
+//     try {
+//       const config = {
+//         headers: {
+//           'Authorization': `Bearer ${token}`,
+//           'Content-Type': 'multipart/form-data'
+//         }
+//       };
+
+//       if (editId) {
+//         await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/products/update/${editId}/`, uploadData, config);
+//       } else {
+//         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/products/create/`, uploadData, config);
+//       }
+      
+//       setShowForm(false);
+//       setEditId(null);
+//       // Reset Form
+//       setFormData({ name: '', price: '', old_price: '', is_bestseller: false, category: 'men_watches', description: '', image: null });
+//       fetchProducts();
+//       alert(editId ? "✅ تم التعديل بنجاح" : "✅ تمت الإضافة بنجاح");
+
+//     } catch (error) {
+//       console.error("Submit Error:", error);
+//       const msg = error.response ? JSON.stringify(error.response.data) : error.message;
+//       alert(`❌ حدث خطأ: ${msg}`);
+//     }
+//   };
+
+//   // 5. Handle Delete
+//   const handleDelete = async (id) => {
+//     if(!window.confirm("⚠️ هل أنت متأكد من حذف هذا المنتج نهائياً؟")) return;
+//     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+//     const token = userInfo ? userInfo.access : null;
+//     try {
+//         const config = { headers: { 'Authorization': `Bearer ${token}` } };
+//         await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/products/delete/${id}/`, config);
+//         fetchProducts();
+//         alert("🗑️ تم الحذف بنجاح");
+//     } catch (error) {
+//         alert("❌ فشل الحذف");
+//     }
+//   };
+
+//   const totalValue = products.reduce((acc, item) => acc + Number(item.price), 0);
+
+//   return (
+//     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans" dir="rtl">
+      
+//       {/* TOPBAR */}
+//       <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-30">
+//         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+//             <div className="flex items-center gap-3">
+//                 <div className="p-2 bg-amber-500 rounded-lg text-black">
+//                     <HomeIcon className="h-6 w-6" />
+//                 </div>
+//                 <h1 className="text-2xl font-black tracking-wide">لوحة التحكم</h1>
+//             </div>
+//             <button onClick={() => router.push('/')} className="flex items-center gap-2 text-slate-400 hover:text-white transition">
+//                 <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+//                 <span>العودة للمتجر</span>
+//             </button>
+//         </div>
+//       </div>
+
+//       <div className="max-w-7xl mx-auto p-6 md:p-8">
+        
+//         {/* ACTIONS */}
+//         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+//             <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+//                 <span className="w-1.5 h-6 bg-amber-500 rounded-full"></span>
+//                 إدارة المنتجات
+//             </h2>
+//             <button 
+//                 onClick={() => { 
+//                     setShowForm(true); 
+//                     setEditId(null); 
+//                     // Reset to clean state
+//                     setFormData({name:'', price:'', old_price:'', is_bestseller: false, category: 'men_watches', description:''}); 
+//                 }}
+//                 className="bg-amber-500 hover:bg-amber-400 text-black px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-amber-500/20 transition hover:scale-105"
+//             >
+//                 <PlusIcon className="h-5 w-5" />
+//                 <span>إضافة منتج جديد</span>
+//             </button>
+//         </div>
+
+//         {/* TABLE */}
+//         <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+//           <div className="overflow-x-auto">
+//             <table className="w-full text-right">
+//                 <thead className="bg-slate-950 text-slate-400 border-b border-slate-800">
+//                 <tr>
+//                     <th className="p-5 font-medium">صورة</th>
+//                     <th className="p-5 font-medium">الاسم</th>
+//                     <th className="p-5 font-medium">القسم</th>
+//                     <th className="p-5 font-medium">السعر</th>
+//                     <th className="p-5 font-medium">مميز؟</th>
+//                     <th className="p-5 font-medium">الإجراءات</th>
+//                 </tr>
+//                 </thead>
+//                 <tbody className="divide-y divide-slate-800">
+//                 {products.map((item) => (
+//                     <tr key={item.id} className="hover:bg-slate-800/50 transition">
+//               <td className="p-5">
+//               <img 
+//                     src={
+//                         item.image 
+//                         ? (item.image.toString().startsWith('http') ? item.image : `${process.env.NEXT_PUBLIC_API_URL}${item.image}`) 
+//                         : '/placeholder.png'
+//                     } 
+//                     alt={item.name} 
+//                     className="w-12 h-12 rounded-lg object-cover border border-slate-700" 
+//                 />
+//                             </td>
+//                         <td className="p-5 font-bold text-white">{item.name}</td>
+//                         <td className="p-5">
+//                             <span className="bg-slate-800 text-slate-300 px-3 py-1 rounded-lg text-xs">
+//                                 {categories.find(c => c.id === item.category)?.name || item.category}
+//                             </span>
+//                         </td>
+//                         <td className="p-5">
+//                             <div className="flex flex-col">
+//                                 <span className="text-emerald-400 font-mono">{item.price}</span>
+//                                 {item.old_price && <span className="text-slate-500 text-xs line-through">{item.old_price}</span>}
+//                             </div>
+//                         </td>
+//                         <td className="p-5">
+//                             {item.is_bestseller && <StarIcon className="h-5 w-5 text-amber-500" />}
+//                         </td>
+//                         <td className="p-5 flex gap-3">
+//                             <button 
+//                                 onClick={() => {
+//                                     setEditId(item.id);
+//                                     // FIX: Handle null values with || ''
+//                                     setFormData({ 
+//                                         name: item.name, 
+//                                         price: item.price, 
+//                                         old_price: item.old_price || '', 
+//                                         is_bestseller: item.is_bestseller || false,
+//                                         category: item.category || 'men_watches', 
+//                                         description: item.description, 
+//                                         image: null 
+//                                     });
+//                                     setShowForm(true);
+//                                 }}
+//                                 className="text-amber-500 hover:bg-amber-500/10 p-2 rounded-lg transition"
+//                             >
+//                                 <PencilSquareIcon className="h-5 w-5" />
+//                             </button>
+//                             <button 
+//                                 onClick={() => handleDelete(item.id)}
+//                                 className="text-red-500 hover:bg-red-500/10 p-2 rounded-lg transition"
+//                             >
+//                                 <TrashIcon className="h-5 w-5" />
+//                             </button>
+//                         </td>
+//                     </tr>
+//                 ))}
+//                 </tbody>
+//             </table>
+//           </div>
+//         </div>
+
+//         {/* FORM MODAL */}
+//         {showForm && (
+//           <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm p-4">
+//             <div className="bg-slate-900 p-8 rounded-2xl w-full max-w-2xl shadow-2xl border border-slate-800 animate-fade-in relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+              
+//               <h3 className="text-2xl font-bold mb-6 text-white border-b border-slate-800 pb-4">
+//                 {editId ? 'تعديل بيانات المنتج' : 'إضافة منتج جديد'}
+//               </h3>
+              
+//               <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+//                 {/* 1. Name */}
+//                 <div className="col-span-2 md:col-span-1">
+//                   <label className="block text-sm font-bold text-slate-400 mb-2">اسم المنتج</label>
+//                   <input type="text" className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none transition" 
+//                     value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
+//                 </div>
+
+//                 {/* 2. Price */}
+//                 <div className="col-span-2 md:col-span-1">
+//                   <label className="block text-sm font-bold text-slate-400 mb-2">السعر الحالي (ريال)</label>
+//                   <input type="number" className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none transition" 
+//                     value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} required />
+//                 </div>
+
+//                 {/* 3. Old Price (THE FIX) */}
+//                 <div className="col-span-2 md:col-span-1">
+//                   <label className="block text-sm font-bold text-slate-400 mb-2">السعر قبل الخصم (اختياري)</label>
+//                   <input 
+//                     type="number" 
+//                     placeholder="اتركه فارغاً إذا لا يوجد خصم" 
+//                     className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none transition" 
+//                     value={formData.old_price || ''} // FIX: Ensure never undefined
+//                     onChange={e => setFormData({...formData, old_price: e.target.value})} 
+//                   />
+//                 </div>
+
+//                 {/* 4. Best Seller */}
+//                 <div className="col-span-2 md:col-span-1 flex items-center gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
+//                    <input 
+//                      type="checkbox" 
+//                      id="bestseller"
+//                      className="w-5 h-5 accent-amber-500"
+//                      checked={formData.is_bestseller || false} // FIX: Ensure boolean
+//                      onChange={e => setFormData({...formData, is_bestseller: e.target.checked})}
+//                    />
+//                    <label htmlFor="bestseller" className="text-white font-bold cursor-pointer">عرض في قسم "الأكثر مبيعاً"؟</label>
+//                 </div>
+
+//                 {/* 5. Category */}
+//                 <div className="col-span-2">
+//                   <label className="block text-sm font-bold text-slate-400 mb-3">اختر القسم</label>
+//                   <div className="flex flex-wrap gap-2">
+//                     {categories.map((cat) => (
+//                       <button
+//                         key={cat.id}
+//                         type="button"
+//                         onClick={() => setFormData({...formData, category: cat.id})}
+//                         className={`px-4 py-2.5 rounded-lg text-sm font-bold transition border ${
+//                           formData.category === cat.id
+//                             ? 'bg-amber-500 text-black border-amber-500 shadow-lg shadow-amber-500/20'
+//                             : 'bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-600 hover:text-white'
+//                         }`}
+//                       >
+//                          {formData.category === cat.id && <span className="ml-1">✓</span>}
+//                          {cat.name}
+//                       </button>
+//                     ))}
+//                   </div>
+//                 </div>
+
+//                 {/* 6. Description */}
+//                 <div className="col-span-2">
+//                   <label className="block text-sm font-bold text-slate-400 mb-2">الوصف</label>
+//                   <textarea className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none transition" rows="3"
+//                     value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} required ></textarea>
+//                 </div>
+
+//                 {/* 7. Image */}
+//                 <div className="col-span-2">
+//                    <label className="block text-sm font-bold text-slate-400 mb-2">صورة المنتج</label>
+//                    <input type="file" className="w-full p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400"
+//                     onChange={e => setFormData({...formData, image: e.target.files[0]})} />
+//                 </div>
+
+//                 <div className="col-span-2 flex gap-4 mt-6">
+//                   <button type="submit" className="flex-1 bg-amber-500 hover:bg-amber-400 text-black py-3.5 rounded-xl font-bold transition shadow-lg shadow-amber-500/20">
+//                     {editId ? 'حفظ التعديلات' : 'إضافة المنتج'}
+//                   </button>
+//                   <button type="button" onClick={() => setShowForm(false)} className="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-3.5 rounded-xl font-bold transition">
+//                     إلغاء
+//                   </button>
+//                 </div>
+//               </form>
+//             </div>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
 'use client';
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -850,8 +1223,6 @@ import {
   PlusIcon, 
   PencilSquareIcon, 
   TrashIcon, 
-  BanknotesIcon, 
-  ArchiveBoxIcon,
   ArrowLeftOnRectangleIcon,
   StarIcon 
 } from '@heroicons/react/24/outline';
@@ -860,16 +1231,13 @@ export default function AdminDashboard() {
   const router = useRouter();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  
-  // Form State
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState(null); 
   
-  // 1. Initialize State (Make sure nothing is undefined)
   const [formData, setFormData] = useState({
     name: '',
     price: '',
-    old_price: '',     // Default to empty string
+    old_price: '',
     is_bestseller: false,
     category: 'men_watches',
     description: '',
@@ -886,7 +1254,6 @@ export default function AdminDashboard() {
     { id: 'glasses', name: 'نظارات' },
   ];
 
-  // 2. Security Check
   useEffect(() => {
     const userInfoString = localStorage.getItem('userInfo');
     if (!userInfoString) {
@@ -902,18 +1269,17 @@ export default function AdminDashboard() {
     fetchProducts();
   }, []);
 
-  // 3. Fetch Data
   const fetchProducts = async () => {
     try {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/`);
       setProducts(data);
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      console.error("Fetch Error:", error);
+      setLoading(false);
     }
   };
 
-  // 4. Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -921,28 +1287,28 @@ export default function AdminDashboard() {
     const token = userInfo ? userInfo.access : null;
 
     if (!token) {
-        alert("Session expired. Please login again.");
+        alert("انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى.");
         return;
     }
     
+    // --- FIX 1: FormData correctly formatted ---
     const uploadData = new FormData();
     uploadData.append('name', formData.name);
     uploadData.append('price', formData.price);
     
-    // Handle Optional Old Price
-    if (formData.old_price) {
+    // Only append old_price if it actually has a value
+    if (formData.old_price && formData.old_price !== '') {
         uploadData.append('old_price', formData.old_price);
-    } else {
-        // If empty, send an empty string or don't append (Backend handles null)
-        uploadData.append('old_price', ''); 
     }
 
-    uploadData.append('is_bestseller', formData.is_bestseller ? 'True' : 'False');
+    // Convert boolean to string for Django
+    uploadData.append('is_bestseller', String(formData.is_bestseller));
     uploadData.append('category', formData.category);
     uploadData.append('description', formData.description);
-    uploadData.append('is_active', 'True');
+    uploadData.append('is_active', 'true');
     
-    if (formData.image) {
+    // Only append image if a NEW one was selected
+    if (formData.image instanceof File) {
       uploadData.append('image', formData.image);
     }
 
@@ -950,7 +1316,8 @@ export default function AdminDashboard() {
       const config = {
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
+          // --- FIX 2: Let the browser set the boundary automatically ---
+          'Content-Type': 'multipart/form-data',
         }
       };
 
@@ -962,19 +1329,18 @@ export default function AdminDashboard() {
       
       setShowForm(false);
       setEditId(null);
-      // Reset Form
       setFormData({ name: '', price: '', old_price: '', is_bestseller: false, category: 'men_watches', description: '', image: null });
       fetchProducts();
       alert(editId ? "✅ تم التعديل بنجاح" : "✅ تمت الإضافة بنجاح");
 
     } catch (error) {
-      console.error("Submit Error:", error);
-      const msg = error.response ? JSON.stringify(error.response.data) : error.message;
-      alert(`❌ حدث خطأ: ${msg}`);
+      console.error("Submit Error:", error.response?.data || error.message);
+      // Detailed error message from backend
+      const errorDetail = error.response?.data ? JSON.stringify(error.response.data) : "Network Error";
+      alert(`❌ حدث خطأ: ${errorDetail}`);
     }
   };
 
-  // 5. Handle Delete
   const handleDelete = async (id) => {
     if(!window.confirm("⚠️ هل أنت متأكد من حذف هذا المنتج نهائياً؟")) return;
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -989,77 +1355,69 @@ export default function AdminDashboard() {
     }
   };
 
-  const totalValue = products.reduce((acc, item) => acc + Number(item.price), 0);
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans" dir="rtl">
       
       {/* TOPBAR */}
       <div className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
             <div className="flex items-center gap-3">
                 <div className="p-2 bg-amber-500 rounded-lg text-black">
                     <HomeIcon className="h-6 w-6" />
                 </div>
-                <h1 className="text-2xl font-black tracking-wide">لوحة التحكم</h1>
+                <h1 className="text-xl md:text-2xl font-black">لوحة التحكم</h1>
             </div>
             <button onClick={() => router.push('/')} className="flex items-center gap-2 text-slate-400 hover:text-white transition">
                 <ArrowLeftOnRectangleIcon className="h-5 w-5" />
-                <span>العودة للمتجر</span>
+                <span className="hidden sm:inline">العودة للمتجر</span>
             </button>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-6 md:p-8">
+      <div className="max-w-7xl mx-auto p-4 md:p-8">
         
         {/* ACTIONS */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2 w-full">
                 <span className="w-1.5 h-6 bg-amber-500 rounded-full"></span>
-                إدارة المنتجات
+                إدارة المنتجات ({products.length})
             </h2>
             <button 
                 onClick={() => { 
                     setShowForm(true); 
                     setEditId(null); 
-                    // Reset to clean state
-                    setFormData({name:'', price:'', old_price:'', is_bestseller: false, category: 'men_watches', description:''}); 
+                    setFormData({name:'', price:'', old_price:'', is_bestseller: false, category: 'men_watches', description:'', image: null}); 
                 }}
-                className="bg-amber-500 hover:bg-amber-400 text-black px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-amber-500/20 transition hover:scale-105"
+                className="w-full md:w-auto bg-amber-500 hover:bg-amber-400 text-black px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg transition"
             >
                 <PlusIcon className="h-5 w-5" />
                 <span>إضافة منتج جديد</span>
             </button>
         </div>
 
-        {/* TABLE */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+        {/* TABLE - Responsive wrapper */}
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-right">
+            <table className="w-full text-right min-w-[600px]">
                 <thead className="bg-slate-950 text-slate-400 border-b border-slate-800">
                 <tr>
-                    <th className="p-5 font-medium">صورة</th>
-                    <th className="p-5 font-medium">الاسم</th>
-                    <th className="p-5 font-medium">القسم</th>
-                    <th className="p-5 font-medium">السعر</th>
-                    <th className="p-5 font-medium">مميز؟</th>
-                    <th className="p-5 font-medium">الإجراءات</th>
+                    <th className="p-5">صورة</th>
+                    <th className="p-5">الاسم</th>
+                    <th className="p-5">القسم</th>
+                    <th className="p-5">السعر</th>
+                    <th className="p-5">الإجراءات</th>
                 </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
                 {products.map((item) => (
                     <tr key={item.id} className="hover:bg-slate-800/50 transition">
-              <td className="p-5">
-              <img 
-                    src={
-                        item.image 
-                        ? (item.image.toString().startsWith('http') ? item.image : `${process.env.NEXT_PUBLIC_API_URL}${item.image}`) 
-                        : '/placeholder.png'
-                    } 
-                    alt={item.name} 
-                    className="w-12 h-12 rounded-lg object-cover border border-slate-700" 
-                />
-                            </td>
+                        <td className="p-5">
+                            <img 
+                                src={item.image || '/placeholder.png'} 
+                                alt={item.name} 
+                                className="w-12 h-12 rounded-lg object-cover border border-slate-700" 
+                            />
+                        </td>
                         <td className="p-5 font-bold text-white">{item.name}</td>
                         <td className="p-5">
                             <span className="bg-slate-800 text-slate-300 px-3 py-1 rounded-lg text-xs">
@@ -1067,19 +1425,12 @@ export default function AdminDashboard() {
                             </span>
                         </td>
                         <td className="p-5">
-                            <div className="flex flex-col">
-                                <span className="text-emerald-400 font-mono">{item.price}</span>
-                                {item.old_price && <span className="text-slate-500 text-xs line-through">{item.old_price}</span>}
-                            </div>
-                        </td>
-                        <td className="p-5">
-                            {item.is_bestseller && <StarIcon className="h-5 w-5 text-amber-500" />}
+                            <span className="text-emerald-400 font-mono">{item.price} ر.ي</span>
                         </td>
                         <td className="p-5 flex gap-3">
                             <button 
                                 onClick={() => {
                                     setEditId(item.id);
-                                    // FIX: Handle null values with || ''
                                     setFormData({ 
                                         name: item.name, 
                                         price: item.price, 
@@ -1091,14 +1442,11 @@ export default function AdminDashboard() {
                                     });
                                     setShowForm(true);
                                 }}
-                                className="text-amber-500 hover:bg-amber-500/10 p-2 rounded-lg transition"
+                                className="text-amber-500 p-2"
                             >
                                 <PencilSquareIcon className="h-5 w-5" />
                             </button>
-                            <button 
-                                onClick={() => handleDelete(item.id)}
-                                className="text-red-500 hover:bg-red-500/10 p-2 rounded-lg transition"
-                            >
+                            <button onClick={() => handleDelete(item.id)} className="text-red-500 p-2">
                                 <TrashIcon className="h-5 w-5" />
                             </button>
                         </td>
@@ -1111,94 +1459,70 @@ export default function AdminDashboard() {
 
         {/* FORM MODAL */}
         {showForm && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm p-4">
-            <div className="bg-slate-900 p-8 rounded-2xl w-full max-w-2xl shadow-2xl border border-slate-800 animate-fade-in relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+            <div className="bg-slate-900 p-6 md:p-8 rounded-2xl w-full max-w-2xl shadow-2xl border border-slate-800 max-h-[90vh] overflow-y-auto">
               
-              <h3 className="text-2xl font-bold mb-6 text-white border-b border-slate-800 pb-4">
+              <h3 className="text-2xl font-bold mb-6 text-white">
                 {editId ? 'تعديل بيانات المنتج' : 'إضافة منتج جديد'}
               </h3>
               
               <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                {/* 1. Name */}
                 <div className="col-span-2 md:col-span-1">
                   <label className="block text-sm font-bold text-slate-400 mb-2">اسم المنتج</label>
-                  <input type="text" className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none transition" 
+                  <input type="text" className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white outline-none" 
                     value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
                 </div>
 
-                {/* 2. Price */}
                 <div className="col-span-2 md:col-span-1">
-                  <label className="block text-sm font-bold text-slate-400 mb-2">السعر الحالي (ريال)</label>
-                  <input type="number" className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none transition" 
+                  <label className="block text-sm font-bold text-slate-400 mb-2">السعر الحالي</label>
+                  <input type="number" className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white outline-none" 
                     value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} required />
                 </div>
 
-                {/* 3. Old Price (THE FIX) */}
                 <div className="col-span-2 md:col-span-1">
                   <label className="block text-sm font-bold text-slate-400 mb-2">السعر قبل الخصم (اختياري)</label>
-                  <input 
-                    type="number" 
-                    placeholder="اتركه فارغاً إذا لا يوجد خصم" 
-                    className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none transition" 
-                    value={formData.old_price || ''} // FIX: Ensure never undefined
-                    onChange={e => setFormData({...formData, old_price: e.target.value})} 
-                  />
+                  <input type="number" className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white outline-none" 
+                    value={formData.old_price} onChange={e => setFormData({...formData, old_price: e.target.value})} />
                 </div>
 
-                {/* 4. Best Seller */}
                 <div className="col-span-2 md:col-span-1 flex items-center gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
-                   <input 
-                     type="checkbox" 
-                     id="bestseller"
-                     className="w-5 h-5 accent-amber-500"
-                     checked={formData.is_bestseller || false} // FIX: Ensure boolean
-                     onChange={e => setFormData({...formData, is_bestseller: e.target.checked})}
-                   />
-                   <label htmlFor="bestseller" className="text-white font-bold cursor-pointer">عرض في قسم "الأكثر مبيعاً"؟</label>
+                   <input type="checkbox" id="bestseller" className="w-5 h-5 accent-amber-500"
+                     checked={formData.is_bestseller} onChange={e => setFormData({...formData, is_bestseller: e.target.checked})} />
+                   <label htmlFor="bestseller" className="text-white font-bold cursor-pointer">الأكثر مبيعاً؟</label>
                 </div>
 
-                {/* 5. Category */}
                 <div className="col-span-2">
-                  <label className="block text-sm font-bold text-slate-400 mb-3">اختر القسم</label>
+                  <label className="block text-sm font-bold text-slate-400 mb-3">القسم</label>
                   <div className="flex flex-wrap gap-2">
                     {categories.map((cat) => (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => setFormData({...formData, category: cat.id})}
-                        className={`px-4 py-2.5 rounded-lg text-sm font-bold transition border ${
-                          formData.category === cat.id
-                            ? 'bg-amber-500 text-black border-amber-500 shadow-lg shadow-amber-500/20'
-                            : 'bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-600 hover:text-white'
+                      <button key={cat.id} type="button" onClick={() => setFormData({...formData, category: cat.id})}
+                        className={`px-4 py-2 rounded-lg text-sm font-bold transition border ${
+                          formData.category === cat.id ? 'bg-amber-500 text-black border-amber-500' : 'bg-slate-950 text-slate-400 border-slate-800'
                         }`}
                       >
-                         {formData.category === cat.id && <span className="ml-1">✓</span>}
                          {cat.name}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* 6. Description */}
                 <div className="col-span-2">
                   <label className="block text-sm font-bold text-slate-400 mb-2">الوصف</label>
-                  <textarea className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none transition" rows="3"
+                  <textarea className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white outline-none" rows="3"
                     value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} required ></textarea>
                 </div>
 
-                {/* 7. Image */}
                 <div className="col-span-2">
                    <label className="block text-sm font-bold text-slate-400 mb-2">صورة المنتج</label>
-                   <input type="file" className="w-full p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400"
+                   <input type="file" className="w-full p-2 bg-slate-950 border border-slate-800 text-slate-400 rounded-xl"
                     onChange={e => setFormData({...formData, image: e.target.files[0]})} />
                 </div>
 
-                <div className="col-span-2 flex gap-4 mt-6">
-                  <button type="submit" className="flex-1 bg-amber-500 hover:bg-amber-400 text-black py-3.5 rounded-xl font-bold transition shadow-lg shadow-amber-500/20">
+                <div className="col-span-2 flex gap-4 mt-4">
+                  <button type="submit" className="flex-1 bg-amber-500 text-black py-4 rounded-xl font-bold shadow-lg transition">
                     {editId ? 'حفظ التعديلات' : 'إضافة المنتج'}
                   </button>
-                  <button type="button" onClick={() => setShowForm(false)} className="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-3.5 rounded-xl font-bold transition">
+                  <button type="button" onClick={() => setShowForm(false)} className="flex-1 bg-slate-800 text-white py-4 rounded-xl font-bold transition">
                     إلغاء
                   </button>
                 </div>
