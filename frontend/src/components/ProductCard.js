@@ -103,11 +103,6 @@ const ProductCard = ({ product, onQuickView }) => {
             
             <div className="flex items-center gap-3 mb-4">
                 <span className="text-lg font-bold text-amber-400">{product.price} ريال</span>
-                {hasDiscount && (
-                <span className="text-sm text-slate-500 line-through decoration-red-500/50 font-mono">
-                    {product.old_price} ريال
-                </span>
-                )}
             </div>
           </div>
 

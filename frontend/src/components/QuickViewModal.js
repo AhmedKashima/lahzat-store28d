@@ -100,15 +100,20 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
                     <h2 className="text-2xl md:text-3xl font-black text-white mb-3 md:mb-4">{product.name}</h2>
                     
                     {/* Price Display */}
-                    <div className={`mb-6 ${product.old_price ? 'flex flex-col items-end' : 'flex items-center gap-3'}`}>
-                      {product.old_price && (
-                        <span className="text-base sm:text-lg text-slate-500 line-through mb-1"> {/* Adjusted font size */}
-                          {product.old_price} ريال
+                    <div className="flex items-center gap-4 mb-6">
+                        <span className="text-2xl md:text-3xl font-bold text-emerald-400">
+                            {product.price} ريال
                         </span>
-                      )}
-                      <span className="text-xl sm:text-2xl font-bold text-emerald-400"> {/* Adjusted font size */}
-                        {product.price} ريال
-                      </span>
+                        {product.old_price && (
+                        <span className="text-lg md:text-xl text-slate-500 line-through">
+                            {product.old_price} ريال
+                        </span>
+                        )}
+                        {product.old_price && (
+                            <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-md">
+                                خصم {Math.round(((product.old_price - product.price) / product.old_price) * 100)}%
+                            </span>
+                        )}
                     </div>
 
                     <p className="text-slate-300 leading-relaxed mb-6 md:mb-8 border-t border-slate-800 pt-4">

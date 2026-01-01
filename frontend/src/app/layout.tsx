@@ -80,7 +80,7 @@ const amiri = Amiri({
 })
 
 export const metadata = {
-  title: 'متجر لحظات | Lahazat Sotre',
+  title: 'متجر لحظات | Lahazat Store',
   description: 'أفضل الساعات الفاخرة',
 }
 

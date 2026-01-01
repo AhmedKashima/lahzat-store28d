@@ -155,7 +155,7 @@ export default function Home() {
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1">
               <button
-                onClick={() => handleCategoryClick('all')}
+                onClick={() => handleShowAll('all')}
                 className={`px-5 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 ${
                   activeCategory === 'all'
                     ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
@@ -167,7 +167,7 @@ export default function Home() {
               {categories.map((cat) => (
                 <button
                   key={cat.id}
-                  onClick={() => handleCategoryClick(cat.id)}
+                  onClick={() => handleShowAll(cat.id)}
                   className={`px-5 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 ${
                     activeCategory === cat.id
                       ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
@@ -245,7 +245,7 @@ export default function Home() {
             <div className="lg:hidden bg-slate-900/95 backdrop-blur-xl border-t border-white/10 py-4">
               <div className="flex flex-col gap-1 px-2">
                 <button
-                  onClick={() => handleCategoryClick('all')}
+                  onClick={() => handleShowAll('all')}
                   className={`text-right py-3 px-4 rounded-lg text-sm font-medium transition-all ${
                     activeCategory === 'all'
                       ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
@@ -257,7 +257,7 @@ export default function Home() {
                 {categories.map((cat) => (
                   <button
                     key={cat.id}
-                    onClick={() => handleCategoryClick(cat.id)}
+                    onClick={() => handleShowAll(cat.id)}
                     className={`text-right py-3 px-4 rounded-lg text-sm font-medium transition-all ${
                       activeCategory === cat.id
                         ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
@@ -594,9 +594,9 @@ export default function Home() {
             {/* Brand Column */}
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="relative">
-                  <ShoppingBagIcon className="h-10 w-10 text-gold" />
-                  <div className="absolute inset-0 bg-gold/20 blur-md"></div>
+              <div className="relative">
+              <ShoppingBagIcon className="h-8 w-8 text-yellow-500" />
+                <div className="absolute inset-0 bg-yellow/20 blur-md"></div>
                 </div>
                 <h2 className="text-2xl font-bold text-white">
                   <span className="text-gold">

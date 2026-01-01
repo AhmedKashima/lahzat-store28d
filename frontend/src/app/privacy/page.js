@@ -46,7 +46,7 @@ export default function PrivacyPolicy() {
         <div className="flex items-center gap-2">
           <ShoppingBagIcon className="h-8 w-8 text-yellow-500" />
           <h1 className="text-2xl font-black text-white">
-            <span className="text-gold -500">Lahazat Sotre</span>
+            <span className="text-gold -500">Lahazat Store</span>
           </h1>
         </div>
         <Link

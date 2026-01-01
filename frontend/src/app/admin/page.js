@@ -85,16 +85,11 @@ export default function AdminDashboard() {
     const uploadData = new FormData();
     uploadData.append('name', formData.name);
     uploadData.append('price', formData.price);
-    
-    // Handle Optional Old Price
-    if (formData.old_price) {
-        uploadData.append('old_price', formData.old_price);
-    }
-
-    uploadData.append('is_bestseller', formData.is_bestseller);
-    uploadData.append('category', formData.category); // Fix: Send Category
+    uploadData.append('old_price', formData.old_price || '');
+    uploadData.append('is_bestseller', formData.is_bestseller ? 'true' : 'false');
+    uploadData.append('category', formData.category);
     uploadData.append('description', formData.description);
-    uploadData.append('is_active', 'True'); // Fix: Auto Active
+    uploadData.append('is_active', 'true');
     
     if (formData.image) {
       uploadData.append('image', formData.image);
@@ -104,7 +99,6 @@ export default function AdminDashboard() {
       const config = {
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
         }
       };
 
