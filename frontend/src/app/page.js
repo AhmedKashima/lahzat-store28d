@@ -7430,7 +7430,7 @@
 //   );
 // }
 
-//secont deepseek
+//secont deepseek which i like with color for price 
 
 // 'use client';
 // import { useState, useEffect } from 'react';
@@ -8195,7 +8195,7 @@
 //   );
 // }
 
-
+// third one 
 'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -8805,7 +8805,108 @@ export default function Home() {
 
       {/* Use the original ReviewsSection component (make sure it has the slider) */}
       <ReviewsSection />
+{/* RATINGS SECTION - Horizontal Slider */}
+<div className="bg-gradient-to-b from-slate-900 to-slate-950 py-20 md:py-28">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {/* Section Header */}
+    <div className="flex items-center justify-center gap-4 mb-12">
+      <div className="relative">
+        <svg className="h-10 w-10 text-gold" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <div className="absolute inset-0 bg-gold/20 blur-lg animate-pulse"></div>
+      </div>
+      <div className="text-center">
+        <h2 className="text-3xl md:text-4xl font-bold text-gold mb-2">
+          تقييمات العملاء
+        </h2>
+        <p className="text-slate-400">اضف تقييمك</p>
+        <div className="h-1 w-20 bg-gradient-to-r from-gold to-transparent mx-auto mt-3"></div>
+      </div>
+    </div>
 
+    {/* Reviews Slider */}
+    <div className="relative group">
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        spaceBetween={30}
+        slidesPerView={1}
+        navigation={{
+          prevEl: '.reviews-prev',
+          nextEl: '.reviews-next',
+        }}
+        pagination={{
+          clickable: true,
+          el: '.reviews-pagination',
+        }}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
+        loop={true}
+        breakpoints={{
+          640: { slidesPerView: 2 },
+          768: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
+        }}
+        className="pb-12"
+      >
+        {/* Sample Reviews - Replace with your actual data */}
+        {[
+          { id: 1, name: 'محمد أحمد', rating: 5, comment: 'منتج رائع وجودة عالية، شكراً لكم على الخدمة المميزة', date: '٢٠٢٤-٠١-١٥' },
+          { id: 2, name: 'سارة علي', rating: 4, comment: 'التوصيل سريع والمنتج كما في الصور، أنصح الجميع', date: '٢٠٢٤-٠١-١٠' },
+          { id: 3, name: 'عبدالله كامل', rating: 5, comment: 'أفضل متجر للهدايا الفاخرة، جودة لا مثيل لها', date: '٢٠٢٤-٠١-٠٥' },
+          { id: 4, name: 'فاطمة محمد', rating: 5, comment: 'خدمة عملاء ممتازة، أنصح الجميع بالتسوق من هنا', date: '٢٠٢٤-٠١-٠١' },
+          { id: 5, name: 'خالد سعيد', rating: 4, comment: 'جودة المنتجات تستحق السعر، شكراً لحظات', date: '٢٠٢٣-١٢-٢٥' },
+          { id: 6, name: 'نورة حسن', rating: 5, comment: 'هدية مميزة نالت إعجاب الجميع، شكراً لكم', date: '٢٠٢٣-١٢-٢٠' },
+        ].map((review) => (
+          <SwiperSlide key={review.id}>
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-gold/20 transition-all duration-300 h-full">
+              {/* Rating Stars */}
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg
+                    key={i}
+                    className={`h-5 w-5 ${i < review.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-600'}`}
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              
+              {/* Review Comment */}
+              <p className="text-slate-300 mb-6 text-lg leading-relaxed">
+                "{review.comment}"
+              </p>
+              
+              {/* Reviewer Info */}
+              <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                <div>
+                  <p className="font-bold text-white">{review.name}</p>
+                  <p className="text-slate-500 text-sm">{review.date}</p>
+                </div>
+                <div className="text-4xl text-gold opacity-50">"</div>
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      
+      {/* Custom Navigation Buttons */}
+      <button className="reviews-prev absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-black/50 hover:bg-black/80 text-gold p-3 rounded-full shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0">
+        <ChevronLeftIcon className="h-6 w-6" />
+      </button>
+      <button className="reviews-next absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-black/50 hover:bg-black/80 text-gold p-3 rounded-full shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0">
+        <ChevronRightIcon className="h-6 w-6" />
+      </button>
+      
+      {/* Pagination Dots */}
+      <div className="reviews-pagination flex justify-center gap-2 mt-8"></div>
+    </div>
+  </div>
+</div>
       {/* PRE-FOOTER CTA */}
       <div className="relative bg-gradient-to-b from-slate-900 to-slate-950 py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1920')] bg-cover bg-center opacity-5"></div>
