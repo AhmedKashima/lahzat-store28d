@@ -147,7 +147,7 @@ export default function Home() {
               </div>
               <h1 className="text-1xl font-black text-white tracking-gold">
               <span className="text-gold">
-                Lahazat Sotre
+                Lahazat Store
               </span>
             </h1>
             </div>
@@ -605,7 +605,7 @@ export default function Home() {
                 </div>
                 <h2 className="text-2xl font-bold text-white">
                   <span className="text-gold">
-                    Lahazat Sotre
+                    Lahazat Store
                   </span>
                 </h2>
               </div>
