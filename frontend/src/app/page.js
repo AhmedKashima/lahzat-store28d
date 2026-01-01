@@ -155,7 +155,7 @@ export default function Home() {
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1">
               <button
-                onClick={() => handleShowAll('all')}
+                onClick={() => handleCategoryClick('all')}
                 className={`px-5 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 ${
                   activeCategory === 'all'
                     ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
@@ -245,7 +245,7 @@ export default function Home() {
             <div className="lg:hidden bg-slate-900/95 backdrop-blur-xl border-t border-white/10 py-4">
               <div className="flex flex-col gap-1 px-2">
                 <button
-                  onClick={() => handleShowAll('all')}
+                  onClick={() => handleCategoryClick('all')}
                   className={`text-right py-3 px-4 rounded-lg text-sm font-medium transition-all ${
                     activeCategory === 'all'
                       ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
@@ -390,7 +390,7 @@ export default function Home() {
             {/* Best Sellers Slider */}
             <div className="relative group">
               <Swiper
-                modules={[Navigation, Pagination]}
+                modules={[Navigation, Pagination, Autoplay]}
                 spaceBetween={20}
                 slidesPerView={2}
                 navigation={{
@@ -401,6 +401,11 @@ export default function Home() {
                   clickable: true,
                   el: '.best-seller-pagination',
                 }}
+                autoplay={{
+                  delay: 4000,
+                  disableOnInteraction: false,
+                }}
+                loop={true}
                 breakpoints={{
                   640: { slidesPerView: 3 },
                   768: { slidesPerView: 3 },
