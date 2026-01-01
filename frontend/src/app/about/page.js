@@ -9,7 +9,7 @@ export default function About() {
       <nav className="p-6 border-b border-slate-800 flex justify-between items-center">
         <div className="flex items-center gap-2">
            <ShoppingBagIcon className="h-8 w-8 text-amber-500" />
-           <h1 className="text-2xl font-black text-white">watch<span className="text-amber-500">Store</span></h1>
+           <h1 className="text-2xl font-black text-white"><span className="text-gold -500">Lahazat Store</span></h1>
         </div>
         <Link href="/" className="flex items-center gap-2 text-slate-400 hover:text-white">
            <span>العودة للرئيسية</span>
@@ -18,7 +18,7 @@ export default function About() {
       </nav>
 
       <main className="max-w-4xl mx-auto px-4 py-16">
-         <h1 className="text-4xl font-bold text-amber-500 mb-8 border-b border-slate-800 pb-4">من نحن</h1>
+         <h1 className="text-4xl font-bold text-gold -500 mb-8 border-b border-slate-800 pb-4">من نحن</h1>
          <div className="prose prose-invert prose-lg text-slate-300 leading-loose">
             <p>
                مرحباً بكم في <strong>لحظات</strong>، وجهتكم الأولى للأناقة والفخامة.

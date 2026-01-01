@@ -10,7 +10,7 @@ export default function ReturnPolicy() {
         <div className="flex items-center gap-2">
           <ShoppingBagIcon className="h-8 w-8 text-amber-500" />
           <h1 className="text-2xl font-black text-white">
-            watch<span className="text-amber-500">Store</span>
+            <span className="text-gold -500">Lahazat Store</span>
           </h1>
         </div>
         <Link
@@ -23,7 +23,7 @@ export default function ReturnPolicy() {
       </nav>
 
       <main className="max-w-4xl mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold text-amber-500 mb-8 border-b border-slate-800 pb-4">
+        <h1 className="text-4xl font-bold text-gold -500 mb-8 border-b border-slate-800 pb-4">
           سياسة الاستبدال والاسترجاع
         </h1>
 

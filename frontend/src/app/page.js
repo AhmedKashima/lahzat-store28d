@@ -145,11 +145,11 @@ export default function Home() {
                 <ShoppingBagIcon className="h-9 w-9 text-amber-500 transition-transform group-hover:rotate-12" />
                 <div className="absolute inset-0 bg-amber-500/20 blur-md rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></div>
               </div>
-              <h1 className="text-2xl font-black text-white tracking-tight">
-                <span className="bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
-                  لحظات
-                </span>
-              </h1>
+              <h1 className="text-1xl font-black text-white tracking-gold">
+              <span className="text-gold">
+                Lahazat Sotre
+              </span>
+            </h1>
             </div>
 
             {/* Desktop Navigation */}
@@ -335,9 +335,9 @@ export default function Home() {
         <div className="relative z-30 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-8">
           {/* Main Title */}
           <div className="mb-6">
-            <h1 className="text-5xl sm:text-6xl md:text-8xl font-black mb-3 tracking-tight">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-black mb-3 tracking-tight">
               <span className="text-gold">
-                لحظات
+                 متجر لحظات
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-slate-300 font-light max-w-2xl mx-auto leading-relaxed">
@@ -346,7 +346,7 @@ export default function Home() {
           </div>
 
           {/* Elegant Text Box */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-10 mb-8 max-w-3xl mx-auto transform transition-all duration-500 hover:scale-[1.02] hover:border-amber-500/20">
+          <div className="bg-white/5 backdrop-blur-60xl border border-white/10 rounded-2xl p-6 md:p-10 mb-8 max-w-3xl mx-auto transform transition-all duration-500 hover:scale-[1.02] hover:border-amber-500/20">
             <div className="relative">
               <div className="absolute -top-1 -left-1 w-3 h-3 border-t border-l border-gold/50"></div>
               <div className="absolute -top-1 -right-1 w-3 h-3 border-t border-r border-gold/50"></div>
@@ -600,7 +600,7 @@ export default function Home() {
                 </div>
                 <h2 className="text-2xl font-bold text-white">
                   <span className="text-gold">
-                    لحظات
+                    Lahazat Sotre
                   </span>
                 </h2>
               </div>
@@ -682,12 +682,7 @@ export default function Home() {
                   </div>
                   <span>اليمن - صنعاء</span>
                 </li>
-                <li className="flex items-center gap-4 text-slate-400 hover:text-gold transition-colors duration-300">
-                  <div className="p-2 bg-white/5 rounded-lg">
-                    <EnvelopeIcon className="h-5 w-5" />
-                  </div>
-                  <span>info@lahazat-store.com</span>
-                </li>
+               
               </ul>
             </div>
           </div>
@@ -715,7 +710,7 @@ export default function Home() {
                     className="relative flex items-center gap-3 no-underline transition-all duration-500 group-hover:scale-105"
                   >
                     {/* Name with Elegant Gradient */}
-                    <span className="text-lg font-bold bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 bg-clip-text text-transparent">
+                    <span className="text-gold font-bold bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 bg-clip-text text-transparent">
                       IBRAHIM SALEH KASHIMA
                     </span>
                     
