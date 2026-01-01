@@ -346,242 +346,141 @@
 
 // export default ProductCard;
 
-// 'use client'; 
-// import React, { useState } from 'react';
-// import { EyeIcon, HeartIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
-// import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline'; 
-// import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
-// import QuickViewModal from './QuickViewModal';
+'use client'; 
+import React, { useState } from 'react';
+import { EyeIcon, HeartIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline'; 
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
+import QuickViewModal from './QuickViewModal';
 
-// const ProductCard = ({ product, onQuickView }) => {
-//   // --- 1. CONFIGURATION ---
-//   const ADMIN_PHONE = "967782875877"; 
-//   const message = `مرحباً، أنا مهتم بهذا العرض: *${product.name}* - السعر: ${product.price} ريال`;
-//   const whatsappLink = `https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(message)}`;
+const ProductCard = ({ product, onQuickView }) => {
+  // --- 1. CONFIGURATION ---
+  const ADMIN_PHONE = "967782875877"; 
+  const message = `مرحباً، أنا مهتم بهذا العرض: *${product.name}* - السعر: ${product.price} ريال`;
+  const whatsappLink = `https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(message)}`;
 
-//   // --- 2. FAVORITES LOGIC ---
-//   const [isLiked, setIsLiked] = useState(false);
+  // --- 2. FAVORITES LOGIC ---
+  const [isLiked, setIsLiked] = useState(false);
 
-//   React.useEffect(() => {
-//     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-//     if (favorites.includes(product.id)) {
-//       setIsLiked(true);
-//     }
-//   }, [product.id]);
+  React.useEffect(() => {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    if (favorites.includes(product.id)) {
+      setIsLiked(true);
+    }
+  }, [product.id]);
 
-//   const toggleFavorite = () => {
-//     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-//     if (favorites.includes(product.id)) {
-//       favorites = favorites.filter(id => id !== product.id);
-//       setIsLiked(false);
-//     } else {
-//       favorites.push(product.id);
-//       setIsLiked(true);
-//     }
-//     localStorage.setItem('favorites', JSON.stringify(favorites));
-//   };
+  const toggleFavorite = () => {
+    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    if (favorites.includes(product.id)) {
+      favorites = favorites.filter(id => id !== product.id);
+      setIsLiked(false);
+    } else {
+      favorites.push(product.id);
+      setIsLiked(true);
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  };
   
-//   // --- 3. DISCOUNT & IMAGE LOGIC ---
-//   const hasDiscount = product.old_price && Number(product.old_price) > Number(product.price);
-//   const discountPercent = hasDiscount 
-//     ? Math.round(((Number(product.old_price) - Number(product.price)) / Number(product.old_price)) * 100)
-//     : 0;
+  // --- 3. DISCOUNT & IMAGE LOGIC ---
+  const hasDiscount = product.old_price && Number(product.old_price) > Number(product.price);
+  const discountPercent = hasDiscount 
+    ? Math.round(((Number(product.old_price) - Number(product.price)) / Number(product.old_price)) * 100)
+    : 0;
 
-//   // const imageUrl = product.image 
-//   //   ? (product.image.toString().startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image}`)
-//   //   : "/placeholder.png";
+  // const imageUrl = product.image 
+  //   ? (product.image.toString().startsWith('http') ? product.image : `${process.env.NEXT_PUBLIC_API_URL}${product.image}`)
+  //   : "/placeholder.png";
 
-//   const imageUrl = product.image 
-//   ? product.image 
-//   : "https://via.placeholder.com/300?text=No+Image";
+  const imageUrl = product.image 
+  ? product.image 
+  : "https://via.placeholder.com/300?text=No+Image";
   
-//   return (
-//     <>
-//       <div className="group relative bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-amber-500/50 transition-all duration-300 shadow-xl h-full flex flex-col">
-        
-//         {/* Discount Badge */}
-//         {hasDiscount && (
-//           <div className="absolute top-3 left-3 z-20 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-md shadow-lg animate-pulse">
-//             خصم {discountPercent}%
-//           </div>
-//         )}
-
-//         {/* Image Container */}
-//         <div className="relative h-72 w-full bg-white overflow-hidden flex items-center justify-center p-4">
-//           <img 
-//             src={imageUrl} 
-//             alt={product.name} 
-//             className="object-contain max-h-full max-w-full transform group-hover:scale-110 transition-transform duration-700"
-//           />
-          
-//           {/* Hover Buttons */}
-//           <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">
-            
-//             {/* Quick View */}
-//             <button 
-//               onClick={() => onQuickView(product)}
-//               className="bg-white text-slate-900 p-3 rounded-full shadow-xl transform translate-y-10 group-hover:translate-y-0 transition-all duration-300 hover:bg-amber-500 hover:text-white cursor-pointer"
-//               title="معاينة سريعة"
-//             >
-//               <EyeIcon className="h-6 w-6" />
-//             </button>
-
-//             {/* Favorite */}
-//             <button 
-//               onClick={toggleFavorite}
-//               className={`p-3 rounded-full shadow-xl transform translate-y-10 group-hover:translate-y-0 transition-all duration-300 delay-75 cursor-pointer ${
-//                 isLiked 
-//                   ? 'bg-red-500 text-white hover:bg-white hover:text-red-500' 
-//                   : 'bg-white text-slate-900 hover:bg-red-500 hover:text-white' 
-//               }`}
-//               title="إضافة للمفضلة"
-//             >
-//               {isLiked ? (
-//                 <HeartIconSolid className="h-6 w-6 animate-bounce" /> 
-//               ) : (
-//                 <HeartIconOutline className="h-6 w-6" />
-//               )}
-//             </button>
-
-//           </div>
-//         </div>
-
-//         {/* Details */}
-//         <div className="p-5 text-right flex-1 flex flex-col justify-between" dir="rtl">
-//           <div>
-//             <h3 className="text-lg font-bold text-white mb-1 group-hover:text-amber-500 transition-colors truncate">
-//                 {product.name}
-//             </h3>
-            
-//             <p className="text-slate-500 text-xs mb-3 line-clamp-1">
-//                 {product.description}
-//             </p>
-            
-//             <div className="flex items-center gap-3 mb-4">
-//                 <span className="text-xl font-bold text-emerald-400">{product.price} ريال</span>
-//                 {hasDiscount && (
-//                 <span className="text-sm text-slate-500 line-through decoration-red-500/50 font-mono">
-//                     {product.old_price}
-//                 </span>
-//                 )}
-//             </div>
-//           </div>
-
-//           {/* --- 4. UPDATED WHATSAPP BUTTON --- */}
-//           <a 
-//             href={whatsappLink} 
-//             target="_blank" 
-//             rel="noopener noreferrer"
-//             className="w-full border border-slate-700 hover:border-emerald-500 hover:bg-emerald-500/10 text-slate-300 hover:text-emerald-500 py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-bold transition-all"
-//           >
-//             <ChatBubbleLeftRightIcon className="h-5 w-5" />
-//             تواصل للشراء
-//           </a>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default ProductCard;
-
-
-import Image from 'next/image';
-import { useState } from 'react';
-import { HeartIcon, EyeIcon } from '@heroicons/react/24/outline';
-import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
-
-export default function ProductCard({ product, onQuickView }) {
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  if (!product) return null;
-
   return (
-    <div className="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl overflow-hidden hover:border-amber-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-500/10">
-      
-      {/* Favorite Button */}
-      <button
-        onClick={() => setIsFavorite(!isFavorite)}
-        className="absolute top-3 left-3 z-10 p-2 bg-slate-900/80 backdrop-blur-sm rounded-full hover:bg-red-500/20 transition"
-        aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
-      >
-        {isFavorite ? (
-          <HeartSolid className="h-5 w-5 text-red-500" />
-        ) : (
-          <HeartIcon className="h-5 w-5 text-slate-400" />
+    <>
+      <div className="group relative bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-amber-500/50 transition-all duration-300 shadow-xl h-full flex flex-col">
+        
+        {/* Discount Badge */}
+        {hasDiscount && (
+          <div className="absolute top-3 left-3 z-20 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-md shadow-lg animate-pulse">
+            خصم {discountPercent}%
+          </div>
         )}
-      </button>
 
-      {/* Quick View Button */}
-      <button
-        onClick={() => onQuickView(product)}
-        className="absolute top-3 right-3 z-10 p-2 bg-slate-900/80 backdrop-blur-sm rounded-full hover:bg-amber-500/20 transition opacity-0 group-hover:opacity-100"
-        aria-label="عرض سريع"
-      >
-        <EyeIcon className="h-5 w-5 text-slate-400 hover:text-amber-500" />
-      </button>
-
-      {/* Product Image */}
-      <div className="relative h-64 md:h-72 overflow-hidden bg-slate-900">
-        {product.images && product.images[0] ? (
-          <img
-            src={product.images[0]}
-            alt={product.name || 'Product'}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            loading="lazy"
+        {/* Image Container */}
+        <div className="relative h-72 w-full bg-white overflow-hidden flex items-center justify-center p-4">
+          <img 
+            src={imageUrl} 
+            alt={product.name} 
+            className="object-contain max-h-full max-w-full transform group-hover:scale-110 transition-transform duration-700"
           />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-slate-800">
-            <span className="text-slate-500">لا توجد صورة</span>
-          </div>
-        )}
-        
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      </div>
-
-      {/* Product Info */}
-      <div className="p-4 md:p-5">
-        <div className="mb-3">
-          <span className="text-xs text-amber-500 font-bold uppercase tracking-wider">
-            {product.category || 'فئة غير محددة'}
-          </span>
-        </div>
-        
-        <h3 className="text-lg font-bold text-white mb-2 line-clamp-1">
-          {product.name || 'اسم المنتج'}
-        </h3>
-        
-        <p className="text-slate-400 text-sm mb-4 line-clamp-2">
-          {product.description || 'وصف المنتج غير متوفر'}
-        </p>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-black text-amber-400">
-              {product.price ? `${product.price} ر.ي` : 'غير محدد'}
-            </span>
-            {product.originalPrice && (
-              <span className="text-slate-500 line-through text-sm">
-                {product.originalPrice} ر.ي
-              </span>
-            )}
-          </div>
           
-          {product.stock <= 5 && product.stock > 0 && (
-            <span className="text-xs text-red-400 font-bold bg-red-500/10 px-2 py-1 rounded">
-              كميات محدودة
-            </span>
-          )}
-        </div>
-        
-        {product.is_bestseller && (
-          <div className="mt-3 inline-flex items-center gap-1 bg-amber-500/10 text-amber-500 text-xs font-bold px-3 py-1 rounded-full">
-            <span>🔥</span>
-            <span>الأكثر مبيعاً</span>
+          {/* Hover Buttons */}
+          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">
+            
+            {/* Quick View */}
+            <button 
+              onClick={() => onQuickView(product)}
+              className="bg-white text-slate-900 p-3 rounded-full shadow-xl transform translate-y-10 group-hover:translate-y-0 transition-all duration-300 hover:bg-amber-500 hover:text-white cursor-pointer"
+              title="معاينة سريعة"
+            >
+              <EyeIcon className="h-6 w-6" />
+            </button>
+
+            {/* Favorite */}
+            <button 
+              onClick={toggleFavorite}
+              className={`p-3 rounded-full shadow-xl transform translate-y-10 group-hover:translate-y-0 transition-all duration-300 delay-75 cursor-pointer ${
+                isLiked 
+                  ? 'bg-red-500 text-white hover:bg-white hover:text-red-500' 
+                  : 'bg-white text-slate-900 hover:bg-red-500 hover:text-white' 
+              }`}
+              title="إضافة للمفضلة"
+            >
+              {isLiked ? (
+                <HeartIconSolid className="h-6 w-6 animate-bounce" /> 
+              ) : (
+                <HeartIconOutline className="h-6 w-6" />
+              )}
+            </button>
+
           </div>
-        )}
+        </div>
+
+        {/* Details */}
+        <div className="p-5 text-right flex-1 flex flex-col justify-between" dir="rtl">
+          <div>
+            <h3 className="text-lg font-bold text-white mb-1 group-hover:text-amber-500 transition-colors truncate">
+                {product.name}
+            </h3>
+            
+            <p className="text-slate-500 text-xs mb-3 line-clamp-1">
+                {product.description}
+            </p>
+            
+            <div className="flex items-center gap-3 mb-4">
+                <span className="text-xl font-bold text-emerald-400">{product.price} ريال</span>
+                {hasDiscount && (
+                <span className="text-sm text-slate-500 line-through decoration-red-500/50 font-mono">
+                    {product.old_price}
+                </span>
+                )}
+            </div>
+          </div>
+
+          {/* --- 4. UPDATED WHATSAPP BUTTON --- */}
+          <a 
+            href={whatsappLink} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="w-full border border-slate-700 hover:border-emerald-500 hover:bg-emerald-500/10 text-slate-300 hover:text-emerald-500 py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-bold transition-all"
+          >
+            <ChatBubbleLeftRightIcon className="h-5 w-5" />
+            تواصل للشراء
+          </a>
+        </div>
       </div>
-    </div>
+    </>
   );
-}
+};
+
+export default ProductCard;
