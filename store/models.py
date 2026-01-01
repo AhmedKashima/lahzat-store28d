@@ -160,6 +160,7 @@ class SiteReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="المستخدم")
     stars = models.IntegerField(default=5, verbose_name="النجوم")
     comment = models.TextField(verbose_name="التعليق")
+    is_approved = models.BooleanField(default=True, verbose_name="تمت الموافقة")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

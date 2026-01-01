@@ -99,7 +99,7 @@ const LoginForm = () => {
         // Save user data and token to localStorage
         localStorage.setItem('userInfo', JSON.stringify(data));
         
-        toast.success('تم تسجيل الدخول بنجاح!');
+        alert('تم تسجيل الدخول بنجاح!');
   
         // Wait a moment then reload to see admin changes
         setTimeout(() => {
@@ -166,7 +166,7 @@ const RegisterForm = () => {
           { name, email, password }
         );
         
-        toast.success('تم إنشاء حسابك بنجاح! يمكنك الآن تسجيل الدخول.');
+        alert('تم إنشاء حسابك بنجاح! يمكنك الآن تسجيل الدخول.');
         
         // Optionally, switch to login tab after successful registration
         // For now, we'll just inform the user.

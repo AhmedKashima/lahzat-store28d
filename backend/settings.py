@@ -413,17 +413,21 @@ import os
 import dj_database_url
 from datetime import timedelta
 
+# --- Core Paths ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY: Get key from Environment
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-fallback-key')
+# --- Security ---
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-fallback-key-for-development')
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# DEBUG: False in production
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-
-# ALLOWED HOSTS: Allow Railway URL
+# --- Hosts ---
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [
+    "https://lahzat-store28d.vercel.app",
+    "https://lahzat-store28d-production.up.railway.app",
+]
 
+# --- Application Definition ---
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -441,9 +445,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', # Top
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -453,7 +457,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
+WSGI_APPLICATION = 'backend.wsgi.application'
 
+# --- Templates ---
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -469,31 +475,42 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
-
-# DATABASE: Connect via URL (Railway or Neon)
+# --- Database ---
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         conn_max_age=600
     )
 }
 
-# CLOUDINARY
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
-}
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-MEDIA_URL = '/images/'
+# --- Internationalization ---
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
 
-# STATIC FILES
+# --- Static Files (for Admin panel) ---
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# AUTH
+# --- Media Files (User Uploads) ---
+if DEBUG:
+    # Development: serve media files locally
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+else:
+    # Production: serve media files from Cloudinary
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+        'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+    }
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    # MEDIA_URL is not needed for Cloudinary as it generates full URLs
+
+# --- Authentication ---
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -510,17 +527,12 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-# CORS: Allow Vercel
+# --- CORS ---
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://lahzat-store28d.vercel.app", 
-    # Add your new Vercel URL here if it changes
+    "https://lahzat-store28d.vercel.app",
 ]
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://lahzat-store28d.vercel.app",               # Trust the Frontend
-    "https://lahzat-store28d-production.up.railway.app", # Trust the Backend (Admin Panel) <-- ADD THIS
-]
-
+# --- General ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
