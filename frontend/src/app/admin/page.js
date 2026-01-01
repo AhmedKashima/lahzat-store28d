@@ -1279,68 +1279,42 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const token = userInfo ? userInfo.access : null;
-
-    if (!token) {
-        alert("انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى.");
-        return;
-    }
     
-    // --- FIX 1: FormData correctly formatted ---
+    // Use FormData for images
     const uploadData = new FormData();
     uploadData.append('name', formData.name);
     uploadData.append('price', formData.price);
+    if (formData.old_price) uploadData.append('old_price', formData.old_price);
     
-    // Only append old_price if it actually has a value
-    if (formData.old_price && formData.old_price !== '') {
-        uploadData.append('old_price', formData.old_price);
-    }
-
-    // Convert boolean to string for Django
-    uploadData.append('is_bestseller', String(formData.is_bestseller));
+    // FIX: Django needs booleans as small strings
+    uploadData.append('is_bestseller', formData.is_bestseller ? 'true' : 'false');
     uploadData.append('category', formData.category);
     uploadData.append('description', formData.description);
-    uploadData.append('is_active', 'true');
     
-    // Only append image if a NEW one was selected
+    // Only append if file exists
     if (formData.image instanceof File) {
       uploadData.append('image', formData.image);
     }
 
     try {
-      const config = {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          // --- FIX 2: Let the browser set the boundary automatically ---
-          'Content-Type': 'multipart/form-data',
-        }
-      };
-
+      const config = { headers: { 'Authorization': `Bearer ${token}` } };
       if (editId) {
         await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/products/update/${editId}/`, uploadData, config);
       } else {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/products/create/`, uploadData, config);
       }
-      
       setShowForm(false);
-      setEditId(null);
-      setFormData({ name: '', price: '', old_price: '', is_bestseller: false, category: 'men_watches', description: '', image: null });
       fetchProducts();
-      alert(editId ? "✅ تم التعديل بنجاح" : "✅ تمت الإضافة بنجاح");
-
+      alert("✅ Done!");
     } catch (error) {
-      console.error("Submit Error:", error.response?.data || error.message);
-      // Detailed error message from backend
-      const errorDetail = error.response?.data ? JSON.stringify(error.response.data) : "Network Error";
-      alert(`❌ حدث خطأ: ${errorDetail}`);
+      console.error(error);
+      alert("❌ Error: " + JSON.stringify(error.response?.data));
     }
   };
-
   const handleDelete = async (id) => {
     if(!window.confirm("⚠️ هل أنت متأكد من حذف هذا المنتج نهائياً؟")) return;
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
