@@ -486,3 +486,102 @@
 // export default ProductCard;
 
 
+import Image from 'next/image';
+import { useState } from 'react';
+import { HeartIcon, EyeIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
+
+export default function ProductCard({ product, onQuickView }) {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  if (!product) return null;
+
+  return (
+    <div className="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl overflow-hidden hover:border-amber-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-500/10">
+      
+      {/* Favorite Button */}
+      <button
+        onClick={() => setIsFavorite(!isFavorite)}
+        className="absolute top-3 left-3 z-10 p-2 bg-slate-900/80 backdrop-blur-sm rounded-full hover:bg-red-500/20 transition"
+        aria-label={isFavorite ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
+      >
+        {isFavorite ? (
+          <HeartSolid className="h-5 w-5 text-red-500" />
+        ) : (
+          <HeartIcon className="h-5 w-5 text-slate-400" />
+        )}
+      </button>
+
+      {/* Quick View Button */}
+      <button
+        onClick={() => onQuickView(product)}
+        className="absolute top-3 right-3 z-10 p-2 bg-slate-900/80 backdrop-blur-sm rounded-full hover:bg-amber-500/20 transition opacity-0 group-hover:opacity-100"
+        aria-label="عرض سريع"
+      >
+        <EyeIcon className="h-5 w-5 text-slate-400 hover:text-amber-500" />
+      </button>
+
+      {/* Product Image */}
+      <div className="relative h-64 md:h-72 overflow-hidden bg-slate-900">
+        {product.images && product.images[0] ? (
+          <img
+            src={product.images[0]}
+            alt={product.name || 'Product'}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-slate-800">
+            <span className="text-slate-500">لا توجد صورة</span>
+          </div>
+        )}
+        
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+
+      {/* Product Info */}
+      <div className="p-4 md:p-5">
+        <div className="mb-3">
+          <span className="text-xs text-amber-500 font-bold uppercase tracking-wider">
+            {product.category || 'فئة غير محددة'}
+          </span>
+        </div>
+        
+        <h3 className="text-lg font-bold text-white mb-2 line-clamp-1">
+          {product.name || 'اسم المنتج'}
+        </h3>
+        
+        <p className="text-slate-400 text-sm mb-4 line-clamp-2">
+          {product.description || 'وصف المنتج غير متوفر'}
+        </p>
+        
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-black text-amber-400">
+              {product.price ? `${product.price} ر.ي` : 'غير محدد'}
+            </span>
+            {product.originalPrice && (
+              <span className="text-slate-500 line-through text-sm">
+                {product.originalPrice} ر.ي
+              </span>
+            )}
+          </div>
+          
+          {product.stock <= 5 && product.stock > 0 && (
+            <span className="text-xs text-red-400 font-bold bg-red-500/10 px-2 py-1 rounded">
+              كميات محدودة
+            </span>
+          )}
+        </div>
+        
+        {product.is_bestseller && (
+          <div className="mt-3 inline-flex items-center gap-1 bg-amber-500/10 text-amber-500 text-xs font-bold px-3 py-1 rounded-full">
+            <span>🔥</span>
+            <span>الأكثر مبيعاً</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
